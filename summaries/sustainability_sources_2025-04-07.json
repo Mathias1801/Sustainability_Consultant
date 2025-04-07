@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-07T09:29:06.341756",
+  "timestamp": "2025-04-07T09:37:45.513323",
   "query": "sustainability OR 'green transition' OR climate OR biodiversity site:.dk OR site:euractiv.com OR site:theguardian.com Denmark (policy OR goals OR SDGs OR environment)",
   "serper_results": [
     {
@@ -21,16 +21,16 @@
       "date": "6 days ago"
     },
     {
-      "title": "Novo Holdings posts record Total Income and Investment Returns of DKK 60 billion (\u20ac8.0 billion) in 2024, with the Investment Portfolio delivering above-benchmark returns, alongside strong growth at the Novo Group companies",
-      "link": "https://novoholdings.dk/news/novo-holdings-posts-record-total-income-and-investment-returns-of-dkk-60-billion-euro8-0-billion-in-2024-with-the-investment-portfolio-delivering-above-benchmark-returns-alongside-strong-growth-at-the-novo-group-companies",
-      "snippet": "Copenhagen, Denmark \u2013 Novo Holdings today announced its financial results for 2024.* Record returns from the Investment Portfolio and growth of the Novo...",
-      "date": "5 days ago"
-    },
-    {
       "title": "Sylvan Receives Investment from Novo Holdings to Drive Further Growth",
       "link": "https://novoholdings.dk/news/sylvan-receives-investment-from-novo-holdings-to-drive-further-growth",
       "snippet": "COPENHAGEN & SINGAPORE, April 3, 2025 \u2013 Novo Holdings, a leading global life science investor, and KKR, a leading global investment firm, today announced...",
       "date": "4 days ago"
+    },
+    {
+      "title": "Novo Holdings posts record Total Income and Investment Returns of DKK 60 billion (\u20ac8.0 billion) in 2024, with the Investment Portfolio delivering above-benchmark returns, alongside strong growth at the Novo Group companies",
+      "link": "https://novoholdings.dk/news/novo-holdings-posts-record-total-income-and-investment-returns-of-dkk-60-billion-euro8-0-billion-in-2024-with-the-investment-portfolio-delivering-above-benchmark-returns-alongside-strong-growth-at-the-novo-group-companies",
+      "snippet": "Copenhagen, Denmark \u2013 Novo Holdings today announced its financial results for 2024.* Record returns from the Investment Portfolio and growth of the Novo...",
+      "date": "5 days ago"
     },
     {
       "title": "Copenhagen Airport will have 31 new routes for the summer",
@@ -48,7 +48,7 @@
       "title": "EU ministers to meet to consider response to Donald Trump\u2019s tariffs \u2013 Europe live",
       "link": "https://www.theguardian.com/world/live/2025/apr/07/eu-ministers-meeting-response-trump-tariffs-trade-latest-updates-news",
       "snippet": "Meeting in Luxembourg follows EU trade commissioner's meetings with US counterparts last week as Trump signals no intention to back down.",
-      "date": "LIVE43 minutes ago"
+      "date": "LIVE51 minutes ago"
     },
     {
       "title": "The week around the world in 20 pictures",
@@ -57,10 +57,10 @@
       "date": "2 days ago"
     },
     {
-      "title": "Latest news, sport and opinion from the Guardian",
-      "link": "https://www.theguardian.com/",
-      "snippet": "Latest US news, world news, sports, business, opinion, analysis and reviews from the Guardian, the world's leading liberal voice.",
-      "date": "14 Aug 2014"
+      "title": "BILLED-BLADETs nyhedsoverblik 1. april 2025",
+      "link": "https://www.billedbladet.dk/kendte/billed-bladets-nyhedsoverblik-1-april-2025",
+      "snippet": "Velkommen til BILLED-BLADETs daglige nyhedsoverblik, hvor vi hver dag opdaterer jer med kul\u00f8rte og kongelige nyhedshistorier fra ind- og udland.",
+      "date": "6 days ago"
     }
   ],
   "eea_context_sources": [
