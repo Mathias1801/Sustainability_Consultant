@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-07T09:55:40.472612",
+  "timestamp": "2025-04-07T10:02:03.153471",
   "query": "sustainability OR 'green transition' OR climate OR biodiversity site:.dk OR site:euractiv.com OR site:theguardian.com Denmark (policy OR goals OR SDGs OR environment)",
   "serper_results": [
     {
@@ -51,16 +51,16 @@
       "date": "2 days ago"
     },
     {
-      "title": "News in focus",
-      "link": "https://www.theguardian.com/uk",
-      "snippet": "Latest news, sport, business, comment, analysis and reviews from the Guardian, the world's leading liberal voice.",
-      "date": "25 Aug 2014"
-    },
-    {
       "title": "BILLED-BLADETs nyhedsoverblik 1. april 2025",
       "link": "https://www.billedbladet.dk/kendte/billed-bladets-nyhedsoverblik-1-april-2025",
       "snippet": "Velkommen til BILLED-BLADETs daglige nyhedsoverblik, hvor vi hver dag opdaterer jer med kul\u00f8rte og kongelige nyhedshistorier fra ind- og udland.",
       "date": "6 days ago"
+    },
+    {
+      "title": "For applicants",
+      "link": "https://phd.tech.au.dk/for-applicants/apply-here",
+      "snippet": "Apply here for a PhD positon at Graduate School of Technical Sciences, Aarhus University. List of vancant PhD positions and their application deadline.",
+      "date": "9 Oct 2020"
     }
   ],
   "eea_context_sources": [
