@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-07T09:37:45.513323",
+  "timestamp": "2025-04-07T09:55:40.472612",
   "query": "sustainability OR 'green transition' OR climate OR biodiversity site:.dk OR site:euractiv.com OR site:theguardian.com Denmark (policy OR goals OR SDGs OR environment)",
   "serper_results": [
     {
@@ -33,12 +33,6 @@
       "date": "5 days ago"
     },
     {
-      "title": "Copenhagen Airport will have 31 new routes for the summer",
-      "link": "https://cphpost.dk/2025-04-04/general/copenhagen-airport-will-have-31-new-routes-for-the-summer/",
-      "snippet": "This week, multiple airlines launched their summer program, offering a total of 315 direct routes from Copenhagen, of which 31 are new.",
-      "date": "3 days ago"
-    },
-    {
       "title": "20 of Europe\u2019s most beautifully located campsites \u2013 chosen by experts | Camping holidays",
       "link": "https://www.theguardian.com/travel/2025/apr/05/20-of-europes-most-beautifully-located-campsites-chosen-by-experts",
       "snippet": "We asked camping pros to tell us about their favourite sites, from the highest pitches in Switzerland to a wilderness reserve in Sweden.",
@@ -48,13 +42,19 @@
       "title": "EU ministers to meet to consider response to Donald Trump\u2019s tariffs \u2013 Europe live",
       "link": "https://www.theguardian.com/world/live/2025/apr/07/eu-ministers-meeting-response-trump-tariffs-trade-latest-updates-news",
       "snippet": "Meeting in Luxembourg follows EU trade commissioner's meetings with US counterparts last week as Trump signals no intention to back down.",
-      "date": "LIVE51 minutes ago"
+      "date": "LIVE1 hour ago"
     },
     {
       "title": "The week around the world in 20 pictures",
       "link": "https://www.theguardian.com/artanddesign/gallery/2025/apr/04/the-week-around-the-world-in-20-pictures",
       "snippet": "Israeli airstrikes in Gaza, Trump tariffs, the bin strike in Birmingham and the Grand National Meeting at Aintree: the past seven days as captured by the...",
       "date": "2 days ago"
+    },
+    {
+      "title": "News in focus",
+      "link": "https://www.theguardian.com/uk",
+      "snippet": "Latest news, sport, business, comment, analysis and reviews from the Guardian, the world's leading liberal voice.",
+      "date": "25 Aug 2014"
     },
     {
       "title": "BILLED-BLADETs nyhedsoverblik 1. april 2025",
