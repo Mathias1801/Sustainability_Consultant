@@ -1,4 +1,5 @@
 # app.py
+
 import os
 import json
 from datetime import datetime
@@ -14,7 +15,8 @@ load_dotenv()
 def main():
     # === 1. Run Serper Search and Save JSON ===
     serper_results = fetch_sustainability_articles()
-    json_filename = f"sustainability_sources_{datetime.now().strftime('%Y-%m-%d')}.json"
+    json_filename = f"summaries/sustainability_sources_{datetime.now().strftime('%Y-%m-%d')}.json"
+    os.makedirs("summaries", exist_ok=True)
     with open(json_filename, "w", encoding="utf-8") as f:
         json.dump(serper_results, f, indent=2)
     print(f"\n✅ Serper results saved to: {json_filename}")
@@ -45,12 +47,12 @@ def main():
     print("\n🚀 Running the Crew...\n")
     final_output = crew.kickoff()
 
-    # === 4. Save Final Output ===
-    txt_filename = f"sustainability_summary_{datetime.now().strftime('%Y-%m-%d')}.txt"
-    with open(txt_filename, "w", encoding="utf-8") as f:
+    # === 4. Save Final Output as .txt ===
+    summary_filename = f"summaries/sustainability_summary_{datetime.now().strftime('%Y-%m-%d')}.txt"
+    with open(summary_filename, "w", encoding="utf-8") as f:
         f.write(str(final_output))
 
-    print(f"\n📄 Final summary saved to: {txt_filename}")
+    print(f"\n📄 Final summary saved to: {summary_filename}")
 
 if __name__ == "__main__":
     main()
