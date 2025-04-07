@@ -80,5 +80,22 @@ def main():
 
     print(f"📤 Exported all summaries to JSON: {json_export_path}")
 
+    # === 6. Debugging Output: Check What's in the DB ===
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM sustainability_reports")
+    count = cursor.fetchone()[0]
+
+    print(f"\n🧠 Total summaries stored in DB: {count}")
+
+    cursor.execute("SELECT date, substr(content, 1, 100) FROM sustainability_reports ORDER BY id DESC LIMIT 5")
+    recent = cursor.fetchall()
+    print("\n📝 Last 5 entries:")
+    for date, snippet in recent:
+        print(f"- {date}: {snippet.strip()}...")
+
+    conn.close()
+
+
 if __name__ == "__main__":
     main()
