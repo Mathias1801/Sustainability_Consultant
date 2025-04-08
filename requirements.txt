@@ -217,4 +217,3 @@ zipp==3.21.0
 zstandard==0.23.0
 newspaper3k==0.2.8
 lxml_html_clean==0.4.1
-requests==2.32.2
