@@ -67,6 +67,27 @@ def main():
         f.write(final_output_text)
     print(f"📝 Summary text saved to: {txt_path}")
 
+    # === 6b. Copy summary to 'active' and manage rollover
+    active_folder = "data/active"
+    os.makedirs(active_folder, exist_ok=True)
+
+    # Copy summary to active folder
+    active_path = os.path.join(active_folder, os.path.basename(txt_path))
+    with open(active_path, "w", encoding="utf-8") as f:
+        f.write(final_output_text)
+
+    # Cleanup: Ensure only latest 4 files are in 'active'
+    summary_files = [f for f in os.listdir(active_folder) if f.startswith("sustainability_summary_") and f.endswith(".txt")]
+    summary_files_sorted = sorted(summary_files, key=lambda x: x.split('_')[-1].replace('.txt', ''))
+    
+    # Delete older files if more than 4
+    for old_file in summary_files_sorted[:-4]:
+        try:
+            os.remove(os.path.join(active_folder, old_file))
+            print(f"🧹 Removed old summary: {old_file}")
+        except Exception as e:
+            print(f"⚠️ Failed to delete {old_file}: {e}")
+
     # === 7. Insert into SQLite DB
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
