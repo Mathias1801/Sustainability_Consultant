@@ -39,7 +39,6 @@ jobs:
 
           git add data/weekly_log/*.json
           git add data/weekly_summary/*.json
-          git add data/summaries.json
           git add data/sustainability.db
           git add docs/_data/current_summary.json
 
