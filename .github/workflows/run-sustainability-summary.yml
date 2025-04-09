@@ -36,10 +36,9 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      
-          # Make sure we stage the DB, .txt, and .json files
-          git add summaries/*.db summaries/*.txt summaries/*.json || echo "No changes to add"
+
+          # Stage new or updated files in data/
+          git add data/*.txt data/*.json data/*.db || echo "No files to add"
           
           git commit -m "📄 Weekly sustainability summary added" || echo "Nothing to commit"
           git push || echo "Nothing to push"
-
