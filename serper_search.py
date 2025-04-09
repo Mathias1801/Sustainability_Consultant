@@ -1,5 +1,3 @@
-# fetch_articles.py
-
 import os
 import json
 import requests
@@ -11,15 +9,23 @@ from newspaper import Article
 EEA_SOURCES = [
     {
         "title": "EEA – Denmark Country Overview",
-        "link": "https://www.eea.europa.eu/en/countries/eea-member-countries/denmark"
+        "url": "https://www.eea.europa.eu/en/countries/eea-member-countries/denmark"
     },
     {
         "title": "EEA – Denmark Country Profile on SDGs",
-        "link": "https://www.eea.europa.eu/themes/sustainability-transitions/sustainable-development-goals-and-the/country-profiles/denmark-country-profile-sdgs-and"
+        "url": "https://www.eea.europa.eu/themes/sustainability-transitions/sustainable-development-goals-and-the/country-profiles/denmark-country-profile-sdgs-and"
+    },
+    {
+        "title": "EEA – Editorials",
+        "url": "https://www.eea.europa.eu/en/newsroom/editorial"
+    },
+    {
+        "title": "EEA – Newsroom",
+        "url": "https://www.eea.europa.eu/en/newsroom/news"
     }
 ]
 
-# -------------------- FETCH FROM SERPER --------------------
+# -------------------- MAIN FETCH FUNCTION --------------------
 
 def fetch_sustainability_articles():
     api_key = os.getenv("SERPER_API_KEY")
@@ -51,68 +57,57 @@ def fetch_sustainability_articles():
     if response.status_code != 200:
         raise Exception(f"Serper API error {response.status_code}: {response.text}")
 
-    serper_results = response.json().get("news", [])
+    results = response.json().get("news", [])
 
-    # Combine with static EEA links
-    all_results = [
-        {"title": item["title"], "link": item["link"]}
-        for item in serper_results + EEA_SOURCES
+    combined_results = [
+        {"title": item["title"], "link": item["link"], "date": item.get("date", ""), "snippet": item.get("snippet", "")}
+        for item in results
     ]
 
-    return all_results
+    # Add EEA sources (no snippet, no date)
+    for item in EEA_SOURCES:
+        combined_results.append({
+            "title": item["title"],
+            "link": item["url"],
+            "date": "",
+            "snippet": ""
+        })
 
-# -------------------- EXTRACT FULL ARTICLES --------------------
-
-def enrich_articles_with_full_text(article_list):
-    enriched = []
-
-    for item in article_list:
-        url = item.get("link")
+    # Enrich all articles with full text
+    enriched_articles = []
+    for item in combined_results:
+        url = item["link"]
         print(f"📰 Processing: {url}")
 
-        enriched_data = {
+        enriched = {
             "title": item.get("title"),
-            "url": url,
-            "authors": [],
-            "text": ""
+            "link": url,
+            "date": item.get("date", ""),
+            "snippet": item.get("snippet", ""),
+            "text": "",
+            "authors": []
         }
 
         try:
             article = Article(url)
             article.download()
             article.parse()
-
-            enriched_data.update({
-                "title": article.title or enriched_data["title"],
-                "authors": article.authors,
-                "text": article.text
-            })
+            enriched["text"] = article.text
+            enriched["authors"] = article.authors
+            # If newspaper detects a better title, update it
+            if article.title:
+                enriched["title"] = article.title
         except Exception as e:
-            print(f"⚠️ Error processing {url}: {e}")
+            print(f"⚠️ Failed to parse {url}: {e}")
 
-        enriched.append(enriched_data)
+        enriched_articles.append(enriched)
 
-    return enriched
+    # Return structure compatible with `app.py`
+    structured_output = {
+        "timestamp": datetime.now().isoformat(),
+        "query": query,
+        "serper_results": enriched_articles,
+        "eea_context_sources": EEA_SOURCES
+    }
 
-# -------------------- MAIN --------------------
-
-def main():
-    articles = fetch_sustainability_articles()
-    enriched = enrich_articles_with_full_text(articles)
-
-    # Ensure output directory exists
-    output_dir = os.path.join("data", "weekly_log")
-    os.makedirs(output_dir, exist_ok=True)
-
-    # Save file in the folder
-    output_filename = f"enriched_articles_{datetime.now().date()}.json"
-    output_path = os.path.join(output_dir, output_filename)
-
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(enriched, f, ensure_ascii=False, indent=4)
-
-    print(f"✅ Saved {len(enriched)} enriched articles to {output_path}")
-
-
-if __name__ == "__main__":
-    main()
+    return structured_output
