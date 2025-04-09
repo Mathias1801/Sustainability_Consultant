@@ -14,13 +14,14 @@ load_dotenv()
 def main():
     os.makedirs("data/weekly_log", exist_ok=True)
     os.makedirs("data/weekly_summary", exist_ok=True)
+    os.makedirs("docs/_data", exist_ok=True)
 
     summary_date = datetime.now().strftime('%Y-%m-%d')
     db_path = "data/sustainability.db"
-    txt_path = f"data/weekly_summary/sustainability_summary_{summary_date}.txt"
+    json_summary_path = f"data/weekly_summary/sustainability_summary_{summary_date}.json"
     json_filename = f"data/weekly_log/sustainability_sources_{summary_date}.json"
     json_export_path = "data/summaries.json"
-    current_summary_path = "data/current_summary.json"
+    current_summary_path = "docs/_data/current_summary.json"
 
     print(f"📅 Summary date: {summary_date}")
     print(f"🔍 Using DB path: {os.path.abspath(db_path)}")
@@ -56,9 +57,12 @@ def main():
     final_output = crew.kickoff()
     final_output_text = str(final_output)
 
-    with open(txt_path, "w", encoding="utf-8") as f:
-        f.write(final_output_text)
-    print(f"📝 Backup .txt saved to: {txt_path}")
+    with open(json_summary_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "date": summary_date,
+            "content": final_output_text
+        }, f, indent=2)
+    print(f"📝 Backup .json saved to: {json_summary_path}")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -104,7 +108,6 @@ def main():
     except Exception as e:
         print(f"❌ Failed to export summaries.json: {e}")
 
-    # === NEW: Save latest summary as 'current_summary.json'
     try:
         with open(current_summary_path, "w", encoding="utf-8") as f:
             json.dump({
