@@ -38,7 +38,7 @@ def main():
     eea_items = serper_results["eea_context_sources"]
 
     serper_data_text = "\n\n".join(
-        f"Title: {item['title']}\nDate: {item['date']}\nLink: {item['link']}\nSnippet: {item['snippet']}"
+        f"Title: {item['title']}\nDate: {item['date']}\nLink: {item['link']}\nSnippet: {item['snippet']}\nText: {item.get('text', '')}"
         for item in news_items
     )
     serper_data_text += "\n\nEEA Sources:\n" + "\n".join(f"{item['title']} - {item['url']}" for item in eea_items)
