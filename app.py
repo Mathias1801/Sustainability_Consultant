@@ -16,10 +16,10 @@ def main():
 
     # === 1. Set up date and paths
     summary_date = datetime.now().strftime('%Y-%m-%d')
-    db_path = "summaries/sustainability.db"
-    txt_path = f"summaries/sustainability_summary_{summary_date}.txt"
-    json_filename = f"summaries/sustainability_sources_{summary_date}.json"
-    json_export_path = "summaries/summaries.json"
+    db_path = "data/sustainability.db"
+    txt_path = f"data/sustainability_summary_{summary_date}.txt"
+    json_filename = f"data/sustainability_sources_{summary_date}.json"
+    json_export_path = "data/summaries.json"
 
     # === 2. DEBUG: Check environment and files
     print(f"📅 Summary date: {summary_date}")
