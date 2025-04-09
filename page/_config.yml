@@ -1,0 +1,7 @@
+title: "Sustainability Report"
+description: "Your go-to source for daily, weekly, and monthly sustainability news"
+
+collections:
+  pages:
+    output: true
+    permalink: /:name/

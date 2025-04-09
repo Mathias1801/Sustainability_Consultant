@@ -1,0 +1,296 @@
+/* === Reset & Base === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  color: #eee;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+/* === Vanta Background Layering === */
+#vanta-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* === Header === */
+.site-header {
+  background: rgba(17, 17, 17, 0.85);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #333;
+  transition: background 0.3s ease;
+}
+
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left a {
+  margin-right: 1.5rem;
+  color: #eee;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-left a:hover {
+  color: #66ccff;
+}
+
+.nav-right button {
+  background: none;
+  border: 1px solid #eee;
+  padding: 0.4em 0.7em;
+  border-radius: 5px;
+  color: #eee;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.nav-right button:hover {
+  background: #333;
+}
+
+/* === Main Content === */
+.page-content {
+  max-width: 900px;
+  margin: 4rem auto;
+  padding: 2rem 1rem;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+body.light-theme .page-content {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.page-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.page-content p {
+  font-size: 1.3rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* === Footer === */
+.site-footer {
+  text-align: center;
+  color: #888;
+  padding: 2rem 0;
+  border-top: 1px solid #444;
+  background: rgba(17, 17, 17, 0.85);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* === Light Theme === */
+body.light-theme {
+  background: #f9f9f9;
+  color: #222;
+}
+
+body.light-theme .site-header {
+  background: rgba(240, 240, 240, 0.85);
+  border-bottom: 1px solid #ccc;
+}
+
+body.light-theme .nav-left a {
+  color: #222;
+}
+
+body.light-theme .nav-left a:hover {
+  color: #007acc;
+}
+
+body.light-theme .nav-right button {
+  border: 1px solid #222;
+  color: #222;
+}
+
+body.light-theme .nav-right button:hover {
+  background: #ddd;
+}
+
+body.light-theme .site-footer {
+  color: #555;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* === Shared Homepage Section Styling === */
+.homepage-section,
+.from-tip-section,
+.about-us-section {
+  max-width: 850px;
+  margin: 4rem auto;
+  padding: 0 1.5rem 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-secondary, #ccc);
+}
+
+.section-heading {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+body.light-theme .homepage-section,
+body.light-theme .from-tip-section,
+body.light-theme .about-us-section {
+  color: #333;
+}
+
+/* === Highlighted Link Section === */
+.highlight-links p {
+  font-size: 1.05rem;
+  margin: 0.7rem 0;
+}
+
+.highlight-links a {
+  color: #66ccff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.highlight-links a:hover {
+  text-decoration: underline;
+}
+
+/* === Hero With Image (Updated Layout) === */
+.hero-with-image {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 5rem 2rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-with-image .hero-text {
+  flex: 1 1 320px;
+  max-width: 500px;
+}
+
+.hero-with-image .hero-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  line-height: 1.2;
+}
+
+.hero-with-image .hero-text p {
+  font-size: 1.25rem;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+.hero-with-image .hero-image {
+  flex: 1 1 320px;
+  max-width: 550px;
+}
+
+.hero-with-image .hero-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease-in-out;
+}
+
+.hero-with-image .hero-image img:hover {
+  transform: scale(1.015);
+}
+
+body.light-theme .hero-with-image .hero-text p {
+  color: #333;
+}
+
+/* === CTA Button (Optional) === */
+.cta-button {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #66ccff;
+  color: #111;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #3399cc;
+}
+
+/* === Transitions === */
+body,
+.site-header,
+.site-footer,
+.page-content,
+.nav-left a,
+.nav-right button {
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .hero-with-image {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-with-image .hero-text,
+  .hero-with-image .hero-image {
+    max-width: 100%;
+  }
+
+  .hero-with-image .hero-text h1 {
+    font-size: 2.3rem;
+  }
+
+  .hero-with-image .hero-text p {
+    font-size: 1.1rem;
+  }
+
+  .page-content h1 {
+    font-size: 2rem;
+  }
+
+  .page-content p,
+  .highlight-links p {
+    font-size: 1.1rem;
+  }
+
+  .nav-left a {
+    margin-right: 1rem;
+  }
+
+  .nav-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
