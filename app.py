@@ -12,32 +12,26 @@ from serper_search import fetch_sustainability_articles
 load_dotenv()
 
 def main():
-    # === 1. Set up folders
     os.makedirs("data/weekly_log", exist_ok=True)
     os.makedirs("data/weekly_summary", exist_ok=True)
-    os.makedirs("data/active", exist_ok=True)
 
-    # === 2. Define paths
     summary_date = datetime.now().strftime('%Y-%m-%d')
     db_path = "data/sustainability.db"
-    txt_filename = f"sustainability_summary_{summary_date}.txt"
-    txt_path = os.path.join("data", "weekly_summary", txt_filename)
-    active_path = os.path.join("data", "active", txt_filename)
-    json_filename = f"sustainability_sources_{summary_date}.json"
-    json_path = os.path.join("data", "weekly_log", json_filename)
+    txt_path = f"data/weekly_summary/sustainability_summary_{summary_date}.txt"
+    json_filename = f"data/weekly_log/sustainability_sources_{summary_date}.json"
     json_export_path = "data/summaries.json"
+    current_summary_path = "data/current_summary.json"
 
     print(f"📅 Summary date: {summary_date}")
     print(f"🔍 Using DB path: {os.path.abspath(db_path)}")
+    print(f"📂 Contents of data/weekly_log/: {os.listdir('data/weekly_log')}")
 
-    # === 3. Run Serper + enrich + save to JSON
     serper_results = fetch_sustainability_articles()
 
-    with open(json_path, "w", encoding="utf-8") as f:
+    with open(json_filename, "w", encoding="utf-8") as f:
         json.dump(serper_results, f, indent=2)
-    print(f"✅ Serper results saved to: {json_path}")
+    print(f"\n✅ Serper results saved to: {json_filename}")
 
-    # === 4. Prepare input for LLM summarization
     news_items = serper_results["serper_results"]
     eea_items = serper_results["eea_context_sources"]
 
@@ -47,7 +41,6 @@ def main():
     )
     serper_data_text += "\n\nEEA Sources:\n" + "\n".join(f"{item['title']} - {item['url']}" for item in eea_items)
 
-    # === 5. CrewAI summarization
     agents = CustomAgents()
     tasks = CustomTasks()
     summarize_agent = agents.summarize_agent()
@@ -63,37 +56,13 @@ def main():
     final_output = crew.kickoff()
     final_output_text = str(final_output)
 
-    # === 6. Save summary .txt to weekly_summary
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write(final_output_text)
-    print(f"📝 Saved summary to: {txt_path}")
+    print(f"📝 Backup .txt saved to: {txt_path}")
 
-    # === 7. Also copy it to active/
-    with open(active_path, "w", encoding="utf-8") as f:
-        f.write(final_output_text)
-    print(f"📥 Copied summary to active folder: {active_path}")
-
-    # === 8. Prune active folder to max 4 entries
-    try:
-        active_files = [
-            f for f in os.listdir("data/active")
-            if f.startswith("sustainability_summary_") and f.endswith(".txt")
-        ]
-        if len(active_files) > 4:
-            active_files.sort()  # Sorted by filename = date
-            files_to_delete = active_files[:-4]
-            for old_file in files_to_delete:
-                full_path = os.path.join("data/active", old_file)
-                os.remove(full_path)
-                print(f"🗑️ Deleted old active file: {full_path}")
-        else:
-            print(f"✅ Active folder has {len(active_files)} file(s); no cleanup needed.")
-    except Exception as e:
-        print(f"⚠️ Active folder cleanup error: {e}")
-
-    # === 9. Insert into SQLite
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+
     try:
         cursor.execute("""
             INSERT INTO sustainability_reports (date, content)
@@ -104,7 +73,6 @@ def main():
     except Exception as e:
         print(f"❌ Failed to insert into DB: {e}")
 
-    # === 10. Summary count + DB Export
     try:
         cursor.execute("SELECT COUNT(*) FROM sustainability_reports")
         count = cursor.fetchone()[0]
@@ -115,9 +83,18 @@ def main():
         print("\n📝 Last 5 entries:")
         for date, snippet in recent:
             print(f"- {date}: {snippet.strip()}...")
+    except Exception as e:
+        print(f"❌ Failed DB inspection: {e}")
 
+    conn.close()
+
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
         cursor.execute("SELECT date, content FROM sustainability_reports ORDER BY date DESC")
         rows = cursor.fetchall()
+        conn.close()
+
         summaries_json = [{"date": row[0], "content": row[1]} for row in rows]
 
         with open(json_export_path, "w", encoding="utf-8") as f:
@@ -125,9 +102,18 @@ def main():
 
         print(f"📤 Exported all summaries to JSON: {json_export_path}")
     except Exception as e:
-        print(f"❌ Failed summary export: {e}")
-    finally:
-        conn.close()
+        print(f"❌ Failed to export summaries.json: {e}")
+
+    # === NEW: Save latest summary as 'current_summary.json'
+    try:
+        with open(current_summary_path, "w", encoding="utf-8") as f:
+            json.dump({
+                "date": summary_date,
+                "content": final_output_text
+            }, f, indent=2)
+        print(f"🆕 Saved current summary to: {current_summary_path}")
+    except Exception as e:
+        print(f"❌ Failed to save current summary: {e}")
 
 if __name__ == "__main__":
     main()
