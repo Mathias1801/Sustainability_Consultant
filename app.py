@@ -12,19 +12,22 @@ from serper_search import fetch_sustainability_articles
 load_dotenv()
 
 def main():
-    os.makedirs("summaries", exist_ok=True)
+    # Create all required folders
+    os.makedirs("data/weekly_log", exist_ok=True)
+    os.makedirs("data/weekly_summary", exist_ok=True)
 
     # === 1. Set up date and paths
     summary_date = datetime.now().strftime('%Y-%m-%d')
     db_path = "data/sustainability.db"
-    txt_path = f"data/sustainability_summary_{summary_date}.txt"
-    json_filename = f"data/sustainability_sources_{summary_date}.json"
+    json_filename = f"data/weekly_log/sustainability_sources_{summary_date}.json"
+    txt_path = f"data/weekly_summary/sustainability_summary_{summary_date}.txt"
     json_export_path = "data/summaries.json"
 
-    # === 2. DEBUG: Check environment and files
+    # === 2. DEBUG: Check environment and folders
     print(f"📅 Summary date: {summary_date}")
     print(f"🔍 Using DB path: {os.path.abspath(db_path)}")
-    print(f"📂 Contents of summaries/: {os.listdir('summaries')}")
+    print(f"📂 Contents of data/weekly_log/: {os.listdir('data/weekly_log')}")
+    print(f"📂 Contents of data/weekly_summary/: {os.listdir('data/weekly_summary')}")
 
     # === 3. Run Serper search and save raw JSON
     serper_results = fetch_sustainability_articles()
@@ -59,10 +62,10 @@ def main():
     final_output = crew.kickoff()
     final_output_text = str(final_output)
 
-    # === 6. Write output to .txt file
+    # === 6. Write final summary text to weekly_summary folder
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write(final_output_text)
-    print(f"📝 Backup .txt saved to: {txt_path}")
+    print(f"📝 Summary text saved to: {txt_path}")
 
     # === 7. Insert into SQLite DB
     conn = sqlite3.connect(db_path)
@@ -94,7 +97,7 @@ def main():
 
     conn.close()
 
-    # === 9. Export DB to JSON for GitHub Pages
+    # === 9. Export all DB summaries to a JSON file
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
