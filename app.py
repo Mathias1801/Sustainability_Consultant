@@ -12,6 +12,7 @@ from serper_search import fetch_sustainability_articles
 load_dotenv()
 
 def main():
+    os.makedirs("data", exist_ok=True)
     os.makedirs("data/weekly_log", exist_ok=True)
     os.makedirs("data/weekly_summary", exist_ok=True)
     os.makedirs("docs/_data", exist_ok=True)
@@ -20,7 +21,6 @@ def main():
     db_path = "data/sustainability.db"
     json_summary_path = f"data/weekly_summary/sustainability_summary_{summary_date}.json"
     json_filename = f"data/weekly_log/sustainability_sources_{summary_date}.json"
-    json_export_path = "data/summaries.json"
     current_summary_path = "docs/_data/current_summary.json"
 
     print(f"📅 Summary date: {summary_date}")
@@ -91,22 +91,6 @@ def main():
         print(f"❌ Failed DB inspection: {e}")
 
     conn.close()
-
-    try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT date, content FROM sustainability_reports ORDER BY date DESC")
-        rows = cursor.fetchall()
-        conn.close()
-
-        summaries_json = [{"date": row[0], "content": row[1]} for row in rows]
-
-        with open(json_export_path, "w", encoding="utf-8") as f:
-            json.dump(summaries_json, f, indent=2)
-
-        print(f"📤 Exported all summaries to JSON: {json_export_path}")
-    except Exception as e:
-        print(f"❌ Failed to export summaries.json: {e}")
 
     try:
         with open(current_summary_path, "w", encoding="utf-8") as f:
