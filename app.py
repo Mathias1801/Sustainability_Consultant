@@ -12,31 +12,32 @@ from serper_search import fetch_sustainability_articles
 load_dotenv()
 
 def main():
-    # Create all required folders
+    # === 1. Set up folders
     os.makedirs("data/weekly_log", exist_ok=True)
     os.makedirs("data/weekly_summary", exist_ok=True)
+    os.makedirs("data/active", exist_ok=True)
 
-    # === 1. Set up date and paths
+    # === 2. Define paths
     summary_date = datetime.now().strftime('%Y-%m-%d')
     db_path = "data/sustainability.db"
-    json_filename = f"data/weekly_log/sustainability_sources_{summary_date}.json"
-    txt_path = f"data/weekly_summary/sustainability_summary_{summary_date}.txt"
+    txt_filename = f"sustainability_summary_{summary_date}.txt"
+    txt_path = os.path.join("data", "weekly_summary", txt_filename)
+    active_path = os.path.join("data", "active", txt_filename)
+    json_filename = f"sustainability_sources_{summary_date}.json"
+    json_path = os.path.join("data", "weekly_log", json_filename)
     json_export_path = "data/summaries.json"
 
-    # === 2. DEBUG: Check environment and folders
     print(f"📅 Summary date: {summary_date}")
     print(f"🔍 Using DB path: {os.path.abspath(db_path)}")
-    print(f"📂 Contents of data/weekly_log/: {os.listdir('data/weekly_log')}")
-    print(f"📂 Contents of data/weekly_summary/: {os.listdir('data/weekly_summary')}")
 
-    # === 3. Run Serper search and save raw JSON
+    # === 3. Run Serper + enrich + save to JSON
     serper_results = fetch_sustainability_articles()
 
-    with open(json_filename, "w", encoding="utf-8") as f:
+    with open(json_path, "w", encoding="utf-8") as f:
         json.dump(serper_results, f, indent=2)
-    print(f"\n✅ Serper results saved to: {json_filename}")
+    print(f"✅ Serper results saved to: {json_path}")
 
-    # === 4. Prepare input for summarization
+    # === 4. Prepare input for LLM summarization
     news_items = serper_results["serper_results"]
     eea_items = serper_results["eea_context_sources"]
 
@@ -62,36 +63,37 @@ def main():
     final_output = crew.kickoff()
     final_output_text = str(final_output)
 
-    # === 6. Write final summary text to weekly_summary folder
+    # === 6. Save summary .txt to weekly_summary
     with open(txt_path, "w", encoding="utf-8") as f:
         f.write(final_output_text)
-    print(f"📝 Summary text saved to: {txt_path}")
+    print(f"📝 Saved summary to: {txt_path}")
 
-    # === 6b. Copy summary to 'active' and manage rollover
-    active_folder = "data/active"
-    os.makedirs(active_folder, exist_ok=True)
-
-    # Copy summary to active folder
-    active_path = os.path.join(active_folder, os.path.basename(txt_path))
+    # === 7. Also copy it to active/
     with open(active_path, "w", encoding="utf-8") as f:
         f.write(final_output_text)
+    print(f"📥 Copied summary to active folder: {active_path}")
 
-    # Cleanup: Ensure only latest 4 files are in 'active'
-    summary_files = [f for f in os.listdir(active_folder) if f.startswith("sustainability_summary_") and f.endswith(".txt")]
-    summary_files_sorted = sorted(summary_files, key=lambda x: x.split('_')[-1].replace('.txt', ''))
-    
-    # Delete older files if more than 4
-    for old_file in summary_files_sorted[:-4]:
-        try:
-            os.remove(os.path.join(active_folder, old_file))
-            print(f"🧹 Removed old summary: {old_file}")
-        except Exception as e:
-            print(f"⚠️ Failed to delete {old_file}: {e}")
+    # === 8. Prune active folder to max 4 entries
+    try:
+        active_files = [
+            f for f in os.listdir("data/active")
+            if f.startswith("sustainability_summary_") and f.endswith(".txt")
+        ]
+        if len(active_files) > 4:
+            active_files.sort()  # Sorted by filename = date
+            files_to_delete = active_files[:-4]
+            for old_file in files_to_delete:
+                full_path = os.path.join("data/active", old_file)
+                os.remove(full_path)
+                print(f"🗑️ Deleted old active file: {full_path}")
+        else:
+            print(f"✅ Active folder has {len(active_files)} file(s); no cleanup needed.")
+    except Exception as e:
+        print(f"⚠️ Active folder cleanup error: {e}")
 
-    # === 7. Insert into SQLite DB
+    # === 9. Insert into SQLite
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-
     try:
         cursor.execute("""
             INSERT INTO sustainability_reports (date, content)
@@ -102,7 +104,7 @@ def main():
     except Exception as e:
         print(f"❌ Failed to insert into DB: {e}")
 
-    # === 8. Debug: How many records are in DB now?
+    # === 10. Summary count + DB Export
     try:
         cursor.execute("SELECT COUNT(*) FROM sustainability_reports")
         count = cursor.fetchone()[0]
@@ -113,19 +115,9 @@ def main():
         print("\n📝 Last 5 entries:")
         for date, snippet in recent:
             print(f"- {date}: {snippet.strip()}...")
-    except Exception as e:
-        print(f"❌ Failed DB inspection: {e}")
 
-    conn.close()
-
-    # === 9. Export all DB summaries to a JSON file
-    try:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
         cursor.execute("SELECT date, content FROM sustainability_reports ORDER BY date DESC")
         rows = cursor.fetchall()
-        conn.close()
-
         summaries_json = [{"date": row[0], "content": row[1]} for row in rows]
 
         with open(json_export_path, "w", encoding="utf-8") as f:
@@ -133,7 +125,9 @@ def main():
 
         print(f"📤 Exported all summaries to JSON: {json_export_path}")
     except Exception as e:
-        print(f"❌ Failed to export summaries.json: {e}")
+        print(f"❌ Failed summary export: {e}")
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     main()
