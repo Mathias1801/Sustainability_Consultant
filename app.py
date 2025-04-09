@@ -20,18 +20,13 @@ def main():
     summary_date = datetime.now().strftime('%Y-%m-%d')
     db_path = "data/sustainability.db"
     json_summary_path = f"data/weekly_summary/sustainability_summary_{summary_date}.json"
-    json_filename = f"data/weekly_log/sustainability_sources_{summary_date}.json"
+    json_log_path = f"data/weekly_log/sustainability_sources_{summary_date}.json"
     current_summary_path = "docs/_data/current_summary.json"
-
-    print(f"📅 Summary date: {summary_date}")
-    print(f"🔍 Using DB path: {os.path.abspath(db_path)}")
-    print(f"📂 Contents of data/weekly_log/: {os.listdir('data/weekly_log')}")
 
     serper_results = fetch_sustainability_articles()
 
-    with open(json_filename, "w", encoding="utf-8") as f:
+    with open(json_log_path, "w", encoding="utf-8") as f:
         json.dump(serper_results, f, indent=2)
-    print(f"\n✅ Serper results saved to: {json_filename}")
 
     news_items = serper_results["serper_results"]
     eea_items = serper_results["eea_context_sources"]
@@ -47,11 +42,7 @@ def main():
     summarize_agent = agents.summarize_agent()
     summarize_task = tasks.summarize_task(summarize_agent, serper_data_text)
 
-    crew = Crew(
-        agents=[summarize_agent],
-        tasks=[summarize_task],
-        verbose=True
-    )
+    crew = Crew(agents=[summarize_agent], tasks=[summarize_task], verbose=True)
 
     print("\n🚀 Running the Crew...\n")
     final_output = crew.kickoff()
@@ -62,45 +53,91 @@ def main():
             "date": summary_date,
             "content": final_output_text
         }, f, indent=2)
-    print(f"📝 Backup .json saved to: {json_summary_path}")
+
+    with open(current_summary_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "date": summary_date,
+            "content": final_output_text
+        }, f, indent=2)
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    try:
+    # Create tables if they don't exist
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS summary_reports (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date TEXT UNIQUE,
+            content TEXT
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS source_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            report_date TEXT,
+            title TEXT,
+            date TEXT,
+            link TEXT,
+            snippet TEXT,
+            text TEXT,
+            source_type TEXT,
+            UNIQUE(report_date, title, link)
+        )
+    """)
+
+    # Insert summary only if it doesn’t already exist
+    cursor.execute("SELECT COUNT(*) FROM summary_reports WHERE date = ?", (summary_date,))
+    if cursor.fetchone()[0]:
+        print(f"⚠️ Summary for {summary_date} already exists. Skipping insert.")
+    else:
         cursor.execute("""
-            INSERT INTO sustainability_reports (date, content)
+            INSERT INTO summary_reports (date, content)
             VALUES (?, ?)
         """, (summary_date, final_output_text))
-        conn.commit()
-        print(f"📦 Summary inserted into DB for date: {summary_date}")
-    except Exception as e:
-        print(f"❌ Failed to insert into DB: {e}")
+        print(f"📦 Summary inserted for {summary_date}")
 
-    try:
-        cursor.execute("SELECT COUNT(*) FROM sustainability_reports")
-        count = cursor.fetchone()[0]
-        print(f"\n🧠 Total summaries in DB: {count}")
+    # Insert sources, avoiding duplicates
+    inserted_count = 0
+    for item in news_items:
+        try:
+            cursor.execute("""
+                INSERT OR IGNORE INTO source_log (report_date, title, date, link, snippet, text, source_type)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                summary_date,
+                item.get('title', ''),
+                item.get('date', ''),
+                item.get('link', ''),
+                item.get('snippet', ''),
+                item.get('text', ''),
+                "serper"
+            ))
+            inserted_count += cursor.rowcount
+        except Exception as e:
+            print(f"❌ Failed to insert serper source: {e}")
 
-        cursor.execute("SELECT date, substr(content, 1, 100) FROM sustainability_reports ORDER BY id DESC LIMIT 5")
-        recent = cursor.fetchall()
-        print("\n📝 Last 5 entries:")
-        for date, snippet in recent:
-            print(f"- {date}: {snippet.strip()}...")
-    except Exception as e:
-        print(f"❌ Failed DB inspection: {e}")
+    for item in eea_items:
+        try:
+            cursor.execute("""
+                INSERT OR IGNORE INTO source_log (report_date, title, date, link, snippet, text, source_type)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                summary_date,
+                item.get('title', ''),
+                '',
+                item.get('url', ''),
+                '',
+                '',
+                "eea"
+            ))
+            inserted_count += cursor.rowcount
+        except Exception as e:
+            print(f"❌ Failed to insert EEA source: {e}")
 
+    print(f"📥 Inserted {inserted_count} new source entries for {summary_date}")
+
+    conn.commit()
     conn.close()
-
-    try:
-        with open(current_summary_path, "w", encoding="utf-8") as f:
-            json.dump({
-                "date": summary_date,
-                "content": final_output_text
-            }, f, indent=2)
-        print(f"🆕 Saved current summary to: {current_summary_path}")
-    except Exception as e:
-        print(f"❌ Failed to save current summary: {e}")
 
 if __name__ == "__main__":
     main()
