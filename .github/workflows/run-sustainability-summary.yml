@@ -2,7 +2,7 @@ name: Weekly Sustainability Summary
 
 on:
   schedule:
-    - cron: '0 6 * * 1'  # Every Monday at 06:00 UTC
+    - cron: '0 6 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -37,12 +37,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Stage all updated/generated content safely
-          git add data/weekly_log/*.json || echo "No new .json files"
-          git add data/weekly_summary/*.txt || echo "No new .txt files"
-          git add data/active/*.txt || echo "No updates in active/"
-          git add data/summaries.json || echo "No summaries.json update"
-          git add data/sustainability.db || echo "No DB update"
+          git add data/weekly_log/*.json
+          git add data/weekly_summary/*.txt
+          git add data/current_summary.json
+          git add data/summaries.json
+          git add data/sustainability.db
 
           git commit -m "📄 Weekly sustainability summary added" || echo "Nothing to commit"
           git push || echo "Nothing to push"
