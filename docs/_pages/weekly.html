@@ -6,10 +6,6 @@ permalink: /weekly/
 
 <h1>📊 Weekly Sustainability Insights</h1>
 
-{% assign summary = site.data.current_summary %}
+<p><strong>Summary Date:</strong> {{ site.data.current_summary.date }}</p>
 
-<p><strong>Summary Date:</strong> {{ summary.date }}</p>
-
-<div class="page-content">
-  {{ summary.content | markdownify }}
-</div>
+{{ site.data.current_summary.content | markdownify }}
