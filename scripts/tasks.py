@@ -54,6 +54,8 @@ class CustomTasks:
 
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
 
+                DO NOT REFERENCE SOURCES IN YOUR RESPONSE
+
             """),
             expected_output="A structured summary divided into legislative, industry, strategic, and general sustainability insights.",
             agent=agent,
@@ -101,6 +103,8 @@ class CustomTasks:
                 Your output should be structured in these three sections: Opportunities, Gaps/Risks, Recommendations. You should use exact wordings from the summary file.
 
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
+
+                DO NOT REFERENCE SOURCES IN YOUR RESPONSE
 
             """),
             expected_output="An analysis with sections: Opportunities, Gaps/Risks, and Recommendations tailored to the provided company profile.",
