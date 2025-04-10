@@ -43,12 +43,6 @@ jobs:
           git add data/sustainability.db
           git add docs/_data/current_summary.json
           git add docs/_data/current_consultation.json
-          git add docs/_data/weekly_sources.json
 
           git commit -m "📄 Weekly sustainability summary and business consultation added" || echo "Nothing to commit"
           git push || echo "Nothing to push"
-
-      - name: Copy latest serper search output to weekly_sources.json
-        run: |
-          latest_file=$(ls -t data/weekly_log/sustainability_sources_*.json | head -n 1)
-          cp "$latest_file" docs/_data/weekly_sources.json
