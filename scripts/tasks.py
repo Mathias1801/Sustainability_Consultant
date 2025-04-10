@@ -8,6 +8,8 @@ class CustomTasks:
                 You are an expert sustainability analyst. Your task is to review the following collection of sustainability-related news articles and policy documents and produce a structured summary report for strategic decision-makers.
 
                 NEVER MAKE BULLET POINTS AND DO NOT REFERENCE YOUR SOURCES
+
+                USE MARKDOWN FORMATTING IN YOUR RESPONSE
                 
                 Please follow these steps:
 
@@ -49,6 +51,9 @@ class CustomTasks:
 
                 ### Content to analyze:
                 {serper_data_text}
+
+                USE MARKDOWN FORMATTING IN YOUR RESPONSE
+
             """),
             expected_output="A structured summary divided into legislative, industry, strategic, and general sustainability insights.",
             agent=agent,
@@ -77,13 +82,15 @@ class CustomTasks:
 
                 NEVER MAKE BULLET POINTS AND DO NOT REFERENCE YOUR SOURCES
 
+                USE MARKDOWN FORMATTING IN YOUR RESPONSE
+
                 ### Company Profile:
                 {company_profile}
 
                 ### Sustainability Summary to Analyze:
                 {final_output_text}
 
-                Please perform the following steps:
+                Please perform the following based on the summary you are given:
 
                 1. **Identify Opportunities**: Highlight external trends that support or validate your company’s existing strategy or suggest new growth areas.
 
@@ -91,7 +98,10 @@ class CustomTasks:
 
                 3. **Make Strategic Recommendations**: Provide 3–5 specific, actionable recommendations for improving alignment with sustainability trends. Consider reporting practices, supplier evaluation, technology investments, and employee engagement.
 
-                Your output should be structured in these three sections: Opportunities, Gaps/Risks, Recommendations.
+                Your output should be structured in these three sections: Opportunities, Gaps/Risks, Recommendations. You should use exact wordings from the summary file.
+
+                USE MARKDOWN FORMATTING IN YOUR RESPONSE
+
             """),
             expected_output="An analysis with sections: Opportunities, Gaps/Risks, and Recommendations tailored to the provided company profile.",
             agent=agent,
