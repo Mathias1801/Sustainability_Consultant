@@ -13,3 +13,11 @@ class CustomAgents:
             goal="Analyze provided sustainability data and provide an actionable report.",
             llm=self.OpenAIGPT35,
         )
+        
+    def business_alignment_agent(self):
+        return Agent(
+            role="Corporate Sustainability Strategist",
+            backstory="A senior strategist responsible for aligning external sustainability developments with company goals and operations.",
+            goal="Evaluate sustainability insights in light of internal company strategy, identifying opportunities and risks.",
+            llm=self.OpenAIGPT35,
+        )
