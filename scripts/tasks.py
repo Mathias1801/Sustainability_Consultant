@@ -51,3 +51,44 @@ class CustomTasks:
             expected_output="A structured summary divided into legislative, industry, strategic, and general sustainability insights.",
             agent=agent,
         )
+    def business_alignment_task(self, agent, final_output_text):
+        company_profile = """
+        Q1: Do you have a published sustainability or ESG strategy? (If yes, please provide a link or key goals — e.g., net-zero targets, material focus areas.)
+        1. Yes — Our 2030 strategy includes net-zero targets for Scopes 1 and 2 by 2030, and Scope 3 by 2045. Key focus areas include green logistics, renewable sourcing, and reducing water intensity.
+        
+        Q2: Do you measure and report your greenhouse gas (GHG) emissions? (Please indicate which scopes — 1, 2, or 3 — and share recent figures if available.)
+        2. Yes — Scope 1 and 2 emissions are fully reported for 2022 and 2023. Scope 3 is not yet systematically measured but is identified as a priority for 2025.
+        
+        Q3: What actions have you taken to reduce your environmental footprint in the past year? (This could include energy efficiency, waste reduction, circular economy practices, etc.)
+        3. Implemented building energy retrofits resulting in a 10% reduction in electricity use. Transitioned 40% of vehicle fleet to electric. Launched internal waste-reduction challenge across departments.
+        
+        Q4: Do you evaluate the sustainability practices of your suppliers or partners? (If so, how? For example, supplier audits, certifications, or sustainability clauses.)
+        4. No — We currently do not evaluate supplier sustainability practices formally. There is no audit program or requirement for sustainability certifications, though we are exploring a framework for 2026.
+        
+        Q5: Who in your organization is responsible for sustainability efforts, and do you publish regular reports? (e.g., CSO, ESG committee, or external reporting like GRI/TCFD.)
+        5. Sustainability is overseen by the Chief Strategy Officer. While no dedicated CSO exists, the company issues an integrated report aligned with GRI since 2021 and TCFD since 2023.
+        """
+
+        return Task(
+            description=dedent(f"""
+                You are a Corporate Sustainability Strategist. Your task is to evaluate how the following sustainability trends and insights (produced by another analyst) align with the current sustainability strategy of your company.
+
+                ### Company Profile:
+                {company_profile}
+
+                ### Sustainability Summary to Analyze:
+                {final_output_text}
+
+                Please perform the following steps:
+
+                1. **Identify Opportunities**: Highlight external trends that support or validate your company’s existing strategy or suggest new growth areas.
+
+                2. **Identify Gaps or Risks**: Point out where your company may fall short or face risks based on external developments (e.g., new regulations, competitor actions).
+
+                3. **Make Strategic Recommendations**: Provide 3–5 specific, actionable recommendations for improving alignment with sustainability trends. Consider reporting practices, supplier evaluation, technology investments, and employee engagement.
+
+                Your output should be structured in these three sections: Opportunities, Gaps/Risks, Recommendations.
+            """),
+            expected_output="An analysis with sections: Opportunities, Gaps/Risks, and Recommendations tailored to the provided company profile.",
+            agent=agent,
+        )
