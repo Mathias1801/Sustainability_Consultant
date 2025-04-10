@@ -5,7 +5,7 @@ https://mathias1801.github.io/Exam_MLOps_MFE/
 ![Screenshot](images/flowchart.png)
 
 # Application Setup
-The application utilizes github actions to run a pipeline set up to fetch news related to the sustainability cause relevant to businesses. The main pipeline is driven via the `app.py`-script which utilizes the backend scripts and to update data for the frontend of things.
+The application utilizes github actions to run a pipeline set up to fetch news related to the sustainability cause relevant to businesses. The main pipeline is driven via the `app.py` which utilizes the backend scripts to update data for the frontend of things.
 
 ## Backend
 The backend process starts with `serper_search.py` which utilizes the web scraping tool `Serper`, which is a google web scraping API. Here some specific sources are provided to influence the web scraping in terms of the sources of `EEA` while a query for unspecified sources is also utilized to find outside sources in general as well. For the purpose of this repository these query metrics are hardcoded, however in the future one could imagine it being dynamic query parameters decided by the user of the application. These found sources are stored in a `.json` format in the `data/weekly_log/` folder as well as in the table `source_log` in the database `sustainability.db` where each individual source is a separate row.
