@@ -10,6 +10,6 @@ permalink: /weekly/
 
 <p><strong>Summary Date:</strong> {{ summary.date }}</p>
 
-<div>
-  {{ summary.content | newline_to_br | markdownify }}
+<div class="page-content">
+  {{ summary.content | markdownify }}
 </div>
