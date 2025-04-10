@@ -7,7 +7,7 @@ class CustomTasks:
             description=dedent(f"""
                 You are an expert sustainability analyst. Your task is to review the following collection of sustainability-related news articles and policy documents and produce a structured summary report for strategic decision-makers.
 
-                NEVER MAKE BULLET POINTS AND DO NOT REFERENCE YOUR SOURCES
+                DO NOT REFERENCE SOURCES IN YOUR RESPONSE
 
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
                 
@@ -80,7 +80,7 @@ class CustomTasks:
             description=dedent(f"""
                 You are a Corporate Sustainability Strategist. Your task is to evaluate how the following sustainability trends and insights (produced by another analyst) align with the current sustainability strategy of your company.
 
-                NEVER MAKE BULLET POINTS AND DO NOT REFERENCE YOUR SOURCES
+                DO NOT REFERENCE SOURCES IN YOUR RESPONSE
 
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
 
