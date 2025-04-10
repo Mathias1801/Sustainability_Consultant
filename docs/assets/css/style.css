@@ -82,15 +82,82 @@ body.light-theme .page-content {
   background-color: rgba(255, 255, 255, 0.6);
 }
 
+/* === Markdown Styling Inside .page-content === */
 .page-content h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
 }
 
+.page-content h2,
+.page-content h3,
+.page-content h4,
+.page-content h5,
+.page-content h6 {
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  line-height: 1.4;
+  color: inherit;
+}
+
 .page-content p {
   font-size: 1.3rem;
   max-width: 700px;
-  margin: 0 auto;
+  margin: 0 auto 1.2rem;
+}
+
+.page-content ul,
+.page-content ol {
+  margin: 1rem 0 1.5rem 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.page-content li {
+  margin-bottom: 0.5rem;
+}
+
+.page-content a {
+  color: #66ccff;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.page-content a:hover {
+  text-decoration: none;
+}
+
+.page-content strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+.page-content em {
+  font-style: italic;
+}
+
+.page-content blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 4px solid #66ccff;
+  background-color: rgba(255, 255, 255, 0.05);
+  font-style: italic;
+  color: #ccc;
+}
+
+.page-content code {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+}
+
+.page-content pre {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.95em;
+  margin-bottom: 1rem;
 }
 
 /* === Footer === */
@@ -134,6 +201,18 @@ body.light-theme .nav-right button:hover {
 body.light-theme .site-footer {
   color: #555;
   background: rgba(255, 255, 255, 0.85);
+}
+
+body.light-theme .page-content blockquote {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #555;
+  border-left-color: #007acc;
+}
+
+body.light-theme .page-content code,
+body.light-theme .page-content pre {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: #222;
 }
 
 /* === Shared Homepage Section Styling === */
