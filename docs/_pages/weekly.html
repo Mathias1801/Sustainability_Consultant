@@ -9,3 +9,18 @@ permalink: /weekly/
 <p><strong>Summary Date:</strong> {{ site.data.current_summary.date }}</p>
 
 {{ site.data.current_summary.content | markdownify }}
+
+<h2>Latest Sustainability Sources</h2>
+<ul>
+  {% for source in site.data.weekly_sources %}
+    <li>
+      {% if source.title and source.link %}
+        <a href="{{ source.link }}" target="_blank">{{ source.title }}</a>
+      {% elsif source.title %}
+        {{ source.title }}
+      {% else %}
+        {{ source }}
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
