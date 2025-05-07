@@ -7,8 +7,6 @@ DB_PATH = "data/sustainability.db"
 
 def ensure_schema(conn):
     c = conn.cursor()
-
-    # Create table if it doesn't exist
     c.execute("""
         CREATE TABLE IF NOT EXISTS ratings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,14 +16,6 @@ def ensure_schema(conn):
             UNIQUE(consultation_upload_date, timestamp)
         )
     """)
-
-    c.execute("PRAGMA table_info(ratings)")
-    existing_columns = [row[1] for row in c.fetchall()]
-    if "consultation_upload_date" not in existing_columns:
-        c.execute("ALTER TABLE ratings ADD COLUMN consultation_upload_date TEXT")
-    if "timestamp" not in existing_columns:
-        c.execute("ALTER TABLE ratings ADD COLUMN timestamp TEXT")
-
     conn.commit()
 
 def main():
@@ -45,6 +35,11 @@ def main():
     inserted = 0
     for entry in new_ratings:
         try:
+            print(f"\n🔍 Trying to insert:")
+            print(f"   consultation_upload_date: {entry['consultation_upload_date']}")
+            print(f"   rating: {entry['rating']}")
+            print(f"   timestamp: {entry['timestamp']}")
+
             c.execute("""
                 INSERT OR IGNORE INTO ratings (consultation_upload_date, rating, timestamp)
                 VALUES (?, ?, ?)
@@ -53,13 +48,19 @@ def main():
                 entry["rating"],
                 entry["timestamp"]
             ))
-            inserted += c.rowcount
+
+            if c.rowcount == 0:
+                print("⚠️  Skipped (likely duplicate based on UNIQUE constraint)")
+            else:
+                print("✅ Inserted")
+                inserted += 1
+
         except Exception as e:
             print(f"❌ Error inserting row: {e}")
 
     conn.commit()
     conn.close()
-    print(f"✅ Inserted {inserted} new ratings.")
+    print(f"\n✅ Done. Inserted {inserted} new rating(s).")
 
 if __name__ == "__main__":
     main()
