@@ -3,17 +3,17 @@ name: Daily Sync Ratings from Render
 on:
   schedule:
     - cron: '0 6 * * *'  # Every day at 06:00 UTC
-  workflow_dispatch:      # Allows manual trigger
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: write  # Required to push commits
 
 jobs:
   sync-ratings:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Set up Python
@@ -21,10 +21,10 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: pip install requests
 
-    - name: Sync ratings from Render into SQLite
+    - name: Run sync script
       run: python scripts/sync_ratings.py
 
     - name: Commit updated DB
@@ -32,5 +32,5 @@ jobs:
         git config --global user.name "github-actions"
         git config --global user.email "actions@github.com"
         git add data/sustainability.db
-        git commit -m "Sync new ratings into sustainability.db" || echo "No changes to commit"
+        git commit -m "Sync new ratings from Render API" || echo "No changes to commit"
         git push

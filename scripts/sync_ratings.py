@@ -20,10 +20,10 @@ def main():
     c.execute("""
         CREATE TABLE IF NOT EXISTS ratings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            report_date TEXT NOT NULL,
+            consultation_upload_date TEXT,
             rating INTEGER CHECK(rating BETWEEN 1 AND 5),
-            timestamp TEXT,
-            UNIQUE(report_date, timestamp)
+            timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(consultation_upload_date, timestamp)
         )
     """)
 
@@ -31,9 +31,13 @@ def main():
     for entry in new_ratings:
         try:
             c.execute("""
-                INSERT OR IGNORE INTO ratings (report_date, rating, timestamp)
+                INSERT OR IGNORE INTO ratings (consultation_upload_date, rating, timestamp)
                 VALUES (?, ?, ?)
-            """, (entry["report_date"], entry["rating"], entry["timestamp"]))
+            """, (
+                entry["consultation_upload_date"],
+                entry["rating"],
+                entry["timestamp"]
+            ))
             inserted += c.rowcount
         except Exception as e:
             print(f"Error inserting row: {e}")
