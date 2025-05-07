@@ -13,7 +13,7 @@ def ensure_schema(conn):
             consultation_upload_date TEXT,
             rating INTEGER CHECK(rating BETWEEN 1 AND 5),
             timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(consultation_upload_date, timestamp)
+            UNIQUE(consultation_upload_date, rating, timestamp)
         )
     """)
     conn.commit()
@@ -50,7 +50,7 @@ def main():
             ))
 
             if c.rowcount == 0:
-                print("⚠️  Skipped (likely duplicate based on UNIQUE constraint)")
+                print("⚠️  Skipped (exact duplicate)")
             else:
                 print("✅ Inserted")
                 inserted += 1
