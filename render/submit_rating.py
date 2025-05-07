@@ -58,3 +58,7 @@ def average_rating():
     conn.close()
 
     return jsonify({'average': round(avg, 2) if avg else None})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
+
