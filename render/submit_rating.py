@@ -59,6 +59,15 @@ def average_rating():
 
     return jsonify({'average': round(avg, 2) if avg else None})
 
+@app.route('/debug-ratings', methods=['GET'])
+def debug_ratings():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT id, report_date, rating, timestamp FROM ratings ORDER BY timestamp DESC LIMIT 10")
+    rows = c.fetchall()
+    conn.close()
+    return '<br>'.join([f"{row[0]} | {row[1]} | {row[2]} | {row[3]}" for row in rows])
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
 
