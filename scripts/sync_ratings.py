@@ -7,24 +7,16 @@ DB_PATH = "data/sustainability.db"
 
 def ensure_ratings_table(conn):
     c = conn.cursor()
-
-    # Check if table exists
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='ratings'")
-    if c.fetchone() is None:
-        print("🛠 'ratings' table not found. Creating it...")
-        c.execute("""
-            CREATE TABLE ratings (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                consultation_upload_date TEXT,
-                rating INTEGER CHECK(rating BETWEEN 1 AND 5),
-                timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-                UNIQUE(rating, timestamp)
-            )
-        """)
-        conn.commit()
-        print("✅ 'ratings' table created.")
-    else:
-        print("✅ 'ratings' table exists.")
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS ratings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            type TEXT NOT NULL,
+            content_date TEXT NOT NULL,
+            rating INTEGER CHECK(rating BETWEEN 1 AND 5),
+            timestamp TEXT DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
 
 def main():
     print("📥 Fetching ratings from API...")
@@ -43,18 +35,24 @@ def main():
     inserted = 0
     for entry in new_ratings:
         try:
-            print(f"\n🔍 Trying to insert: rating={entry['rating']} | timestamp={entry['timestamp']}")
+            print(f"\n🔍 Trying to insert:")
+            print(f"   type: {entry['type']}")
+            print(f"   content_date: {entry['content_date']}")
+            print(f"   rating: {entry['rating']}")
+            print(f"   timestamp: {entry['timestamp']}")
+
             c.execute("""
-                INSERT OR IGNORE INTO ratings (consultation_upload_date, rating, timestamp)
-                VALUES (?, ?, ?)
+                INSERT OR IGNORE INTO ratings (type, content_date, rating, timestamp)
+                VALUES (?, ?, ?, ?)
             """, (
-                entry["consultation_upload_date"],
+                entry["type"],
+                entry["content_date"],
                 entry["rating"],
                 entry["timestamp"]
             ))
 
             if c.rowcount == 0:
-                print("⚠️  Skipped (rating + timestamp already exists)")
+                print("⚠️  Skipped (likely duplicate)")
             else:
                 print("✅ Inserted")
                 inserted += 1

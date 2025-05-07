@@ -15,10 +15,10 @@ def init_db():
     c.execute("""
         CREATE TABLE IF NOT EXISTS ratings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            consultation_upload_date TEXT,
+            type TEXT NOT NULL,
+            content_date TEXT NOT NULL,
             rating INTEGER CHECK(rating BETWEEN 1 AND 5),
-            timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(consultation_upload_date, timestamp)
+            timestamp TEXT DEFAULT CURRENT_TIMESTAMP
         )
     """)
     conn.commit()
@@ -30,18 +30,19 @@ init_db()
 @app.route('/submit-rating', methods=['POST'])
 def submit_rating():
     data = request.get_json()
-    consultation_upload_date = data.get('consultation_upload_date')
+    rating_type = data.get('type')  # 'weekly_news' or 'business_consultancy'
+    content_date = data.get('content_date')
     rating = data.get('rating')
 
-    if not (consultation_upload_date and rating and 1 <= int(rating) <= 5):
+    if not (rating_type and content_date and rating and 1 <= int(rating) <= 5):
         return jsonify({'status': 'error', 'message': 'Invalid input'}), 400
 
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute("""
-        INSERT OR IGNORE INTO ratings (consultation_upload_date, rating)
-        VALUES (?, ?)
-    """, (consultation_upload_date, int(rating)))
+        INSERT INTO ratings (type, content_date, rating)
+        VALUES (?, ?, ?)
+    """, (rating_type, content_date, int(rating)))
     conn.commit()
     conn.close()
 
@@ -49,13 +50,17 @@ def submit_rating():
 
 @app.route('/average-rating', methods=['GET'])
 def average_rating():
-    consultation_upload_date = request.args.get('consultation_upload_date')
-    if not consultation_upload_date:
+    rating_type = request.args.get('type')
+    content_date = request.args.get('content_date')
+    if not (rating_type and content_date):
         return jsonify({'average': None})
 
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT AVG(rating) FROM ratings WHERE consultation_upload_date = ?", (consultation_upload_date,))
+    c.execute("""
+        SELECT AVG(rating) FROM ratings
+        WHERE type = ? AND content_date = ?
+    """, (rating_type, content_date))
     avg = c.fetchone()[0]
     conn.close()
 
@@ -65,17 +70,18 @@ def average_rating():
 def download_ratings():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT consultation_upload_date, rating, timestamp FROM ratings ORDER BY timestamp DESC")
+    c.execute("SELECT type, content_date, rating, timestamp FROM ratings ORDER BY timestamp DESC")
     rows = c.fetchall()
     conn.close()
 
     return jsonify([
         {
-            "consultation_upload_date": r[0],
-            "rating": r[1],
-            "timestamp": r[2]
+            "type": row[0],
+            "content_date": row[1],
+            "rating": row[2],
+            "timestamp": row[3]
         }
-        for r in rows
+        for row in rows
     ])
 
 if __name__ == "__main__":

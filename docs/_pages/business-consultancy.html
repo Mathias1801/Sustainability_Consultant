@@ -33,7 +33,8 @@ permalink: /business-consultancy/
 
 <script>
 const backendURL = "https://sustainability-ratings-api.onrender.com";
-const consultationUploadDate = "{{ site.data.current_consultation.date }}";
+const contentDate = "{{ site.data.current_consultation.date }}";
+const ratingType = "business_consultancy";
 
 document.getElementById('ratingForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -42,7 +43,11 @@ document.getElementById('ratingForm').addEventListener('submit', async (e) => {
   const res = await fetch(`${backendURL}/submit-rating`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ rating, consultation_upload_date: consultationUploadDate })
+    body: JSON.stringify({
+      rating,
+      content_date: contentDate,
+      type: ratingType
+    })
   });
 
   const msg = res.ok ? "✅ Thank you for your rating!" : "⚠️ Failed to submit rating.";
@@ -52,7 +57,7 @@ document.getElementById('ratingForm').addEventListener('submit', async (e) => {
 });
 
 async function loadAverageRating() {
-  const res = await fetch(`${backendURL}/average-rating?consultation_upload_date=${consultationUploadDate}`);
+  const res = await fetch(`${backendURL}/average-rating?type=${ratingType}&content_date=${contentDate}`);
   const data = await res.json();
   if (data.average !== null) {
     document.getElementById('averageRating').innerText = `Average rating: ${data.average}`;
