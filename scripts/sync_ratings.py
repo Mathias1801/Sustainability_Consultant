@@ -5,18 +5,26 @@ import os
 API_URL = "https://sustainability-ratings-api.onrender.com/download-ratings"
 DB_PATH = "data/sustainability.db"
 
-def ensure_schema(conn):
+def ensure_ratings_table(conn):
     c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS ratings (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            consultation_upload_date TEXT,
-            rating INTEGER CHECK(rating BETWEEN 1 AND 5),
-            timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
-            UNIQUE(consultation_upload_date, rating, timestamp)
-        )
-    """)
-    conn.commit()
+
+    # Check if table exists
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='ratings'")
+    if c.fetchone() is None:
+        print("🛠 'ratings' table not found. Creating it...")
+        c.execute("""
+            CREATE TABLE ratings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                consultation_upload_date TEXT,
+                rating INTEGER CHECK(rating BETWEEN 1 AND 5),
+                timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(rating, timestamp)
+            )
+        """)
+        conn.commit()
+        print("✅ 'ratings' table created.")
+    else:
+        print("✅ 'ratings' table exists.")
 
 def main():
     print("📥 Fetching ratings from API...")
@@ -29,17 +37,13 @@ def main():
         return
 
     conn = sqlite3.connect(DB_PATH)
-    ensure_schema(conn)
+    ensure_ratings_table(conn)
     c = conn.cursor()
 
     inserted = 0
     for entry in new_ratings:
         try:
-            print(f"\n🔍 Trying to insert:")
-            print(f"   consultation_upload_date: {entry['consultation_upload_date']}")
-            print(f"   rating: {entry['rating']}")
-            print(f"   timestamp: {entry['timestamp']}")
-
+            print(f"\n🔍 Trying to insert: rating={entry['rating']} | timestamp={entry['timestamp']}")
             c.execute("""
                 INSERT OR IGNORE INTO ratings (consultation_upload_date, rating, timestamp)
                 VALUES (?, ?, ?)
@@ -50,7 +54,7 @@ def main():
             ))
 
             if c.rowcount == 0:
-                print("⚠️  Skipped (exact duplicate)")
+                print("⚠️  Skipped (rating + timestamp already exists)")
             else:
                 print("✅ Inserted")
                 inserted += 1
