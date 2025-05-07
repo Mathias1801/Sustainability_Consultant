@@ -1,18 +1,20 @@
 ---
 layout: default
-title: "Weekly News"
-permalink: /weekly/
+title: "Business Consultancy"
+permalink: /business-consultancy/
 ---
 
-<h1 style="text-align: center;">Weekly Sustainability Insights</h1>
+<h1 style="text-align: center;">Business Sustainability Consultation</h1>
 
-<p><strong>Summary Date:</strong> {{ site.data.current_summary.date }}</p>
-
-{{ site.data.current_summary.content | markdownify }}
+<p><strong>Date:</strong> {{ site.data.current_consultation.date }}</p>
 
 <hr />
 
-<h2>Rate this Weekly Summary</h2>
+{{ site.data.current_consultation.content | markdownify }}
+
+<hr />
+
+<h2>Rate this Consultation</h2>
 <form id="ratingForm">
   <label for="rating">Your rating (1–5):</label>
   <select id="rating" required>
@@ -30,8 +32,8 @@ permalink: /weekly/
 
 <script>
 const backendURL = "https://sustainability-ratings-api.onrender.com";
-const contentDate = "{{ site.data.current_summary.date }}";
-const ratingType = "weekly_news";
+const contentDate = "{{ site.data.current_consultation.date }}";
+const ratingType = "business_consultancy";
 
 document.getElementById('ratingForm').addEventListener('submit', async (e) => {
   e.preventDefault();
