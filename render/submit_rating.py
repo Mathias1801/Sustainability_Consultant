@@ -18,7 +18,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             report_date TEXT NOT NULL,
             rating INTEGER CHECK(rating BETWEEN 1 AND 5),
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            timestamp TEXT,
+            UNIQUE(report_date, timestamp)
         )
     """)
     conn.commit()
@@ -67,6 +68,19 @@ def debug_ratings():
     rows = c.fetchall()
     conn.close()
     return '<br>'.join([f"{row[0]} | {row[1]} | {row[2]} | {row[3]}" for row in rows])
+
+@app.route('/download-ratings', methods=['GET'])
+def download_ratings():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT report_date, rating, timestamp FROM ratings ORDER BY timestamp DESC")
+    rows = c.fetchall()
+    conn.close()
+
+    return jsonify([
+        {"report_date": row[0], "rating": row[1], "timestamp": row[2]}
+        for row in rows
+    ])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
