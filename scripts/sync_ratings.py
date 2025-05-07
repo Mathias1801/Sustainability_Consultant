@@ -2,7 +2,7 @@ import sqlite3
 import requests
 import os
 
-API_URL = "https://your-api.onrender.com/download-ratings"
+API_URL = "https://sustainability-ratings-api.onrender.com/download-ratings"
 DB_PATH = "data/sustainability.db"
 
 def main():
@@ -11,36 +11,36 @@ def main():
     new_ratings = response.json()
 
     if not new_ratings:
-        print("No new ratings found.")
+        print("No new ratings to insert.")
         return
 
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
-    # Ensure the table exists
     c.execute("""
         CREATE TABLE IF NOT EXISTS ratings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             report_date TEXT NOT NULL,
-            rating INTEGER,
+            rating INTEGER CHECK(rating BETWEEN 1 AND 5),
             timestamp TEXT,
             UNIQUE(report_date, timestamp)
         )
     """)
 
-
     inserted = 0
     for entry in new_ratings:
-        c.execute("SELECT COUNT(*) FROM ratings WHERE report_date = ? AND timestamp = ?", 
-                  (entry["report_date"], entry["timestamp"]))
-        if c.fetchone()[0] == 0:
-            c.execute("INSERT OR IGNORE INTO ratings (report_date, rating, timestamp) VALUES (?, ?, ?)", 
-                      (entry["report_date"], entry["rating"], entry["timestamp"]))
-            inserted += 1
+        try:
+            c.execute("""
+                INSERT OR IGNORE INTO ratings (report_date, rating, timestamp)
+                VALUES (?, ?, ?)
+            """, (entry["report_date"], entry["rating"], entry["timestamp"]))
+            inserted += c.rowcount
+        except Exception as e:
+            print(f"Error inserting row: {e}")
 
     conn.commit()
     conn.close()
-    print(f"✅ Inserted {inserted} new ratings")
+    print(f"✅ Inserted {inserted} new ratings.")
 
 if __name__ == "__main__":
     main()
