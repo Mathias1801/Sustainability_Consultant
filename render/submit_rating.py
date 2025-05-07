@@ -1,11 +1,32 @@
+import os
+import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import sqlite3
 
 app = Flask(__name__)
 CORS(app)
 
 DB_PATH = 'data/sustainability.db'
+
+os.makedirs('data', exist_ok=True)
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS ratings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            report_date TEXT NOT NULL,
+            rating INTEGER CHECK(rating BETWEEN 1 AND 5),
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+    print("✅ ratings table ensured")
+
+init_db()
+
 
 @app.route('/submit-rating', methods=['POST'])
 def submit_rating():
