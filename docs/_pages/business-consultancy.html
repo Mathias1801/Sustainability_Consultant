@@ -1,20 +1,18 @@
 ---
 layout: default
-title: "Business Consultancy"
-permalink: /business-consultancy/
+title: "Weekly News"
+permalink: /weekly/
 ---
 
-<h1 style="text-align: center;">Business Sustainability Consultation</h1>
+<h1 style="text-align: center;">Weekly Sustainability Insights</h1>
 
-<p><strong>Date:</strong> {{ site.data.current_consultation.date }}</p>
+<p><strong>Summary Date:</strong> {{ site.data.current_summary.date }}</p>
 
-<hr />
-
-{{ site.data.current_consultation.content | markdownify }}
+{{ site.data.current_summary.content | markdownify }}
 
 <hr />
 
-<h2>Rate this Consultation</h2>
+<h2>Rate this Weekly Summary</h2>
 <form id="ratingForm">
   <label for="rating">Your rating (1–5):</label>
   <select id="rating" required>
@@ -29,12 +27,11 @@ permalink: /business-consultancy/
 </form>
 
 <p id="ratingMessage"></p>
-<p id="averageRating"></p>
 
 <script>
 const backendURL = "https://sustainability-ratings-api.onrender.com";
-const contentDate = "{{ site.data.current_consultation.date }}";
-const ratingType = "business_consultancy";
+const contentDate = "{{ site.data.current_summary.date }}";
+const ratingType = "weekly_news";
 
 document.getElementById('ratingForm').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -52,17 +49,5 @@ document.getElementById('ratingForm').addEventListener('submit', async (e) => {
 
   const msg = res.ok ? "✅ Thank you for your rating!" : "⚠️ Failed to submit rating.";
   document.getElementById('ratingMessage').innerText = msg;
-
-  loadAverageRating();
 });
-
-async function loadAverageRating() {
-  const res = await fetch(`${backendURL}/average-rating?type=${ratingType}&content_date=${contentDate}`);
-  const data = await res.json();
-  if (data.average !== null) {
-    document.getElementById('averageRating').innerText = `Average rating: ${data.average}`;
-  }
-}
-
-loadAverageRating();
 </script>
