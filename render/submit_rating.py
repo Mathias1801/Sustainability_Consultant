@@ -1,13 +1,12 @@
-import os
-import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import sqlite3
+import os
 
 app = Flask(__name__)
 CORS(app)
 
 DB_PATH = 'data/sustainability.db'
-
 os.makedirs('data', exist_ok=True)
 
 def init_db():
@@ -16,10 +15,10 @@ def init_db():
     c.execute("""
         CREATE TABLE IF NOT EXISTS ratings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            report_date TEXT NOT NULL,
+            consultation_upload_date TEXT,
             rating INTEGER CHECK(rating BETWEEN 1 AND 5),
-            timestamp TEXT,
-            UNIQUE(report_date, timestamp)
+            timestamp TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(consultation_upload_date, timestamp)
         )
     """)
     conn.commit()
@@ -28,19 +27,21 @@ def init_db():
 
 init_db()
 
-
 @app.route('/submit-rating', methods=['POST'])
 def submit_rating():
     data = request.get_json()
-    report_date = data.get('report_date')
+    consultation_upload_date = data.get('consultation_upload_date')
     rating = data.get('rating')
 
-    if not (report_date and rating and 1 <= int(rating) <= 5):
+    if not (consultation_upload_date and rating and 1 <= int(rating) <= 5):
         return jsonify({'status': 'error', 'message': 'Invalid input'}), 400
 
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("INSERT INTO ratings (report_date, rating) VALUES (?, ?)", (report_date, int(rating)))
+    c.execute("""
+        INSERT OR IGNORE INTO ratings (consultation_upload_date, rating)
+        VALUES (?, ?)
+    """, (consultation_upload_date, int(rating)))
     conn.commit()
     conn.close()
 
@@ -48,40 +49,34 @@ def submit_rating():
 
 @app.route('/average-rating', methods=['GET'])
 def average_rating():
-    report_date = request.args.get('report_date')
-    if not report_date:
+    consultation_upload_date = request.args.get('consultation_upload_date')
+    if not consultation_upload_date:
         return jsonify({'average': None})
-    
+
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT AVG(rating) FROM ratings WHERE report_date = ?", (report_date,))
+    c.execute("SELECT AVG(rating) FROM ratings WHERE consultation_upload_date = ?", (consultation_upload_date,))
     avg = c.fetchone()[0]
     conn.close()
 
     return jsonify({'average': round(avg, 2) if avg else None})
 
-@app.route('/debug-ratings', methods=['GET'])
-def debug_ratings():
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("SELECT id, report_date, rating, timestamp FROM ratings ORDER BY timestamp DESC LIMIT 10")
-    rows = c.fetchall()
-    conn.close()
-    return '<br>'.join([f"{row[0]} | {row[1]} | {row[2]} | {row[3]}" for row in rows])
-
 @app.route('/download-ratings', methods=['GET'])
 def download_ratings():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT report_date, rating, timestamp FROM ratings ORDER BY timestamp DESC")
+    c.execute("SELECT consultation_upload_date, rating, timestamp FROM ratings ORDER BY timestamp DESC")
     rows = c.fetchall()
     conn.close()
 
     return jsonify([
-        {"report_date": row[0], "rating": row[1], "timestamp": row[2]}
-        for row in rows
+        {
+            "consultation_upload_date": r[0],
+            "rating": r[1],
+            "timestamp": r[2]
+        }
+        for r in rows
     ])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
-
