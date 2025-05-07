@@ -11,3 +11,53 @@ permalink: /business-consultancy/
 <hr />
 
 {{ site.data.current_consultation.content | markdownify }}
+
+<hr />
+
+<h2>Rate this Consultation</h2>
+<form id="ratingForm">
+  <label for="rating">Your rating (1–5):</label>
+  <select id="rating" required>
+    <option value="">Select...</option>
+    <option value="1">1 - Poor</option>
+    <option value="2">2 - Fair</option>
+    <option value="3">3 - Good</option>
+    <option value="4">4 - Very Good</option>
+    <option value="5">5 - Excellent</option>
+  </select>
+  <button type="submit">Submit Rating</button>
+</form>
+
+<p id="ratingMessage"></p>
+<p id="averageRating"></p>
+
+<script>
+const backendURL = "https://sustainability-ratings-api.onrender.com";
+const reportDate = "{{ site.data.current_consultation.date }}";
+
+document.getElementById('ratingForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const rating = document.getElementById('rating').value;
+
+  const res = await fetch(`${backendURL}/submit-rating`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rating, report_date: reportDate })
+  });
+
+  const msg = res.ok ? "✅ Thank you for your rating!" : "⚠️ Failed to submit rating.";
+  document.getElementById('ratingMessage').innerText = msg;
+
+  loadAverageRating();
+});
+
+async function loadAverageRating() {
+  const res = await fetch(`${backendURL}/average-rating?report_date=${reportDate}`);
+  const data = await res.json();
+  if (data.average !== null) {
+    document.getElementById('averageRating').innerText = `Average rating: ${data.average}`;
+  }
+}
+
+loadAverageRating();
+</script>
