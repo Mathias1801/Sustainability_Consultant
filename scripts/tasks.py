@@ -97,4 +97,8 @@ class CustomTasks:
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
             
                 DO NOT REFERENCE SOURCES IN YOUR RESPONSE
-            """)
+            """),
+    
+                expected_output="A strategic insightful analysis",
+                agent=agent,
+            )
