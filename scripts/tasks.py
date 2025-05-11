@@ -86,33 +86,35 @@ class CustomTasks:
 
         return Task(
             description=dedent(f"""
-                You are a Corporate Sustainability Strategist. Your task is to evaluate how the following sustainability trends and insights (produced by another analyst) align with the current sustainability strategy of your company.
-
+                You are a Corporate Sustainability Strategist. Your task is to analyze how the following sustainability trends and developments align with the strategic sustainability profile of Maersk.
+            
                 DO NOT REFERENCE SOURCES IN YOUR RESPONSE
-
+            
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
-
+            
                 ### Company Profile:
                 {company_profile}
-
+            
                 ### Sustainability Summary to Analyze:
                 {final_output_text}
-
-                Please perform the following based on the summary you are given:
-
-                1. **Identify Opportunities**: Highlight external trends that support or validate your company’s existing strategy or suggest new growth areas.
-
-                2. **Identify Gaps or Risks**: Point out where your company may fall short or face risks based on external developments (e.g., new regulations, competitor actions).
-
-                3. **Make Strategic Recommendations**: Provide 3–5 specific, actionable recommendations for improving alignment with sustainability trends. Consider reporting practices, supplier evaluation, technology investments, and employee engagement.
-
-                Your output should be structured in these three sections: Opportunities, Gaps/Risks, Recommendations. You should use exact wordings from the summary file.
-
+            
+                Please perform your analysis using the following three dimensions derived from academic research on corporate sustainability strategy:
+            
+                1. **Strategic Integration & Organizational Embedding**
+                   - Assess whether the identified trends can be structurally integrated into Maersk’s governance, operational frameworks, or culture.
+                   - Consider alignment with established internal systems like leadership structures, cross-functional processes, internal communication practices, and management control mechanisms.
+            
+                2. **Differentiation and Innovation Potential**
+                   - Identify any unique sustainability trends in the summary that could enable Maersk to maintain or enhance its strategic advantage over competitors.
+                   - Highlight cases where Maersk could go beyond common ESG practices and invest in hard-to-imitate innovations, infrastructure, or policies.
+            
+                3. **Implementation Readiness and Risk Alignment**
+                   - Evaluate how Maersk’s existing capabilities, employee involvement models, and stakeholder engagement mechanisms position it to adopt or respond to the identified trends.
+                   - Call attention to any gaps or barriers in motivation, training, communication, or supplier practices that may hinder successful integration.
+            
+                Based on your evaluation, conclude your response with **3–5 specific strategic recommendations**. These should be actionable, connected to the summary insights, and tailored to Maersk’s current sustainability maturity.
+            
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
-
+            
                 DO NOT REFERENCE SOURCES IN YOUR RESPONSE
-
-            """),
-            expected_output="An analysis with sections: Opportunities, Gaps/Risks, and Recommendations tailored to the provided company profile.",
-            agent=agent,
-        )
+            """)
