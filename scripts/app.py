@@ -32,13 +32,11 @@ def main():
         json.dump(serper_results, f, indent=2)
 
     news_items = serper_results["serper_results"]
-    eea_items = serper_results["eea_context_sources"]
 
     serper_data_text = "\n\n".join(
         f"Title: {item['title']}\nDate: {item['date']}\nLink: {item['link']}\nSnippet: {item['snippet']}\nText: {item.get('text', '')}"
         for item in news_items
     )
-    serper_data_text += "\n\nEEA Sources:\n" + "\n".join(f"{item['title']} - {item['url']}" for item in eea_items)
 
     agents = CustomAgents()
     tasks = CustomTasks()
@@ -163,24 +161,6 @@ def main():
             inserted_count += cursor.rowcount
         except Exception as e:
             print(f"❌ Failed to insert serper source: {e}")
-
-    for item in eea_items:
-        try:
-            cursor.execute("""
-                INSERT OR IGNORE INTO source_log (report_date, title, date, link, snippet, text, source_type)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (
-                summary_date,
-                item.get('title', ''),
-                '',
-                item.get('url', ''),
-                '',
-                '',
-                "eea"
-            ))
-            inserted_count += cursor.rowcount
-        except Exception as e:
-            print(f"❌ Failed to insert EEA source: {e}")
 
     print(f"📥 Inserted {inserted_count} new source entries for {summary_date}")
 
