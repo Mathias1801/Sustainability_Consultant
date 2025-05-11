@@ -14,7 +14,7 @@ class CustomTasks:
 
                 Focus your efforts on:
                 - Selecting only items related to environmental sustainability, climate policy, ESG frameworks, or industry-wide sustainability actions.
-                - Ignoring news that is not directly relevant (e.g. unrelated finance, celebrity, or general tech news).
+                - Ignoring news that is not directly relevant to the relevant subjects.
 
                 Organize your findings into the following categories:
 
@@ -27,9 +27,9 @@ class CustomTasks:
                 **General awareness**
                 - Note public campaigns, global events, NGO actions, or cultural developments influencing sustainability discourse.
 
-                For each point, write 1–2 sentences explaining what happened and why it might matter to organizations concerned with sustainability.
-
-                Your summary should help a corporate strategist quickly understand the external sustainability context this week — but leave interpretation and alignment to other experts.
+                Your summary should help a corporate strategist quickly understand the external sustainability context this week.
+                
+                Leave interpretation and analysis to other experts.
 
                 USE MARKDOWN FORMATTING IN YOUR RESPONSE
 
