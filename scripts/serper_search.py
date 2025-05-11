@@ -4,76 +4,89 @@ import requests
 from datetime import datetime
 from newspaper import Article
 
-# -------------------- STATIC EEA LINKS --------------------
-
-EEA_SOURCES = [
-    {
-        "title": "EEA – Denmark Country Overview",
-        "url": "https://www.eea.europa.eu/en/countries/eea-member-countries/denmark"
-    },
-    {
-        "title": "EEA – Denmark Country Profile on SDGs",
-        "url": "https://www.eea.europa.eu/themes/sustainability-transitions/sustainable-development-goals-and-the/country-profiles/denmark-country-profile-sdgs-and"
-    },
-    {
-        "title": "EEA – Editorials",
-        "url": "https://www.eea.europa.eu/en/newsroom/editorial"
-    },
-    {
-        "title": "EEA – Newsroom",
-        "url": "https://www.eea.europa.eu/en/newsroom/news"
-    }
-]
-
-# -------------------- MAIN FETCH FUNCTION --------------------
-
 def fetch_sustainability_articles():
     api_key = os.getenv("SERPER_API_KEY")
     if not api_key:
         raise ValueError("Environment variable SERPER_API_KEY is not set.")
 
-    query = (
-        "bæredygtighed OR 'grøn omstilling' OR klima OR biodiversitet "
-        "site:.dk OR site:dr.dk OR site:altinget.dk "
-        "(politik OR mål OR SDG OR miljø)"
-    )
-
-    payload = {
-        "q": query,
-        "type": "news",
-        "gl": "dk",
-        "hl": "da",
-        "tbs": "qdr:w"
-    }
-
-    headers = {
-        "X-API-KEY": api_key,
-        "Content-Type": "application/json"
-    }
-
-    print("🔍 Fetching sustainability news from Serper.dev...")
-    response = requests.post("https://google.serper.dev/news", json=payload, headers=headers)
-
-    if response.status_code != 200:
-        raise Exception(f"Serper API error {response.status_code}: {response.text}")
-
-    results = response.json().get("news", [])
-
-    combined_results = [
-        {"title": item["title"], "link": item["link"], "date": item.get("date", ""), "snippet": item.get("snippet", "")}
-        for item in results
+    # Define all queries and payloads
+    queries_payloads = [
+        (
+            "shipping OR logistik OR containere OR "
+            "bæredygtighed OR 'grøn omstilling' OR klima OR energi OR brændstof "
+            "site:shippingwatch.dk OR site:borsen.dk OR site:finans.dk OR site:dr.dk OR "
+            "site:ing.dk OR site:energywatch.dk OR site:altinget.dk",
+            {
+                "q": "shipping OR logistik OR containere OR bæredygtighed OR 'grøn omstilling' OR klima OR energi OR brændstof "
+                     "site:shippingwatch.dk OR site:borsen.dk OR site:finans.dk OR site:dr.dk OR "
+                     "site:ing.dk OR site:energywatch.dk OR site:altinget.dk",
+                "type": "news",
+                "gl": "dk",
+                "hl": "da",
+                "tbs": "qdr:w"
+            }
+        ),
+        (
+            "shipping OR logistics OR containerships OR maritime OR sustainability OR "
+            "'green transition' OR decarbonization OR net-zero OR climate OR fuels OR energy "
+            "site:lloydslist.maritimeintelligence.informa.com OR "
+            "site:hellenicshippingnews.com OR site:marinelink.com OR site:gcaptain.com OR "
+            "site:splash247.com",
+            {
+                "q": "shipping OR logistics OR containerships OR maritime OR sustainability OR "
+                     "'green transition' OR decarbonization OR net-zero OR climate OR fuels OR energy "
+                     "site:lloydslist.maritimeintelligence.informa.com OR "
+                     "site:hellenicshippingnews.com OR site:marinelink.com OR site:gcaptain.com OR "
+                     "site:splash247.com",
+                "type": "news",
+                "hl": "en",
+                "gl": "us",
+                "tbs": "qdr:w"
+            }
+        ),
+        (
+            "sustainability OR bæredygtighed OR shipping OR logistik OR logistics OR containerships OR containere OR "
+            "climate OR klima OR 'green transition' OR 'grøn omstilling' OR fuels OR brændstof OR maritime OR energi "
+            "site:danishshipping.dk OR site:transport.ec.europa.eu OR site:mission-innovation.net OR site:maersk.com/sustainability/",
+            {
+                "q": "sustainability OR bæredygtighed OR shipping OR logistik OR logistics OR containerships OR containere OR "
+                     "climate OR klima OR 'green transition' OR 'grøn omstilling' OR fuels OR brændstof OR maritime OR energi "
+                     "site:danishshipping.dk OR site:transport.ec.europa.eu OR site:mission-innovation.net OR site:maersk.com/sustainability/",
+                "type": "news",
+                "hl": "en",
+                "tbs": "qdr:w"
+            }
+        )
     ]
 
-    # Add EEA sources (no snippet, no date)
-    for item in EEA_SOURCES:
-        combined_results.append({
-            "title": item["title"],
-            "link": item["url"],
-            "date": "",
-            "snippet": ""
-        })
+    # Fetch and deduplicate articles
+    seen_links = set()
+    combined_results = []
 
-    # Enrich all articles with full text
+    for query, payload in queries_payloads:
+        print(f"🔍 Fetching articles for query:\n{query[:80]}...")
+        headers = {
+            "X-API-KEY": api_key,
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post("https://google.serper.dev/news", json=payload, headers=headers)
+        if response.status_code != 200:
+            print(f"❌ Error {response.status_code}: {response.text}")
+            continue
+
+        for item in response.json().get("news", []):
+            link = item.get("link")
+            if link and link not in seen_links:
+                combined_results.append({
+                    "title": item.get("title"),
+                    "link": link,
+                    "date": item.get("date", ""),
+                    "snippet": item.get("snippet", "")
+                })
+                seen_links.add(link)
+
+    # Enrich with full article text
     enriched_articles = []
     for item in combined_results:
         url = item["link"]
@@ -94,7 +107,6 @@ def fetch_sustainability_articles():
             article.parse()
             enriched["text"] = article.text
             enriched["authors"] = article.authors
-            # If newspaper detects a better title, update it
             if article.title:
                 enriched["title"] = article.title
         except Exception as e:
@@ -102,12 +114,9 @@ def fetch_sustainability_articles():
 
         enriched_articles.append(enriched)
 
-    # Return structure compatible with `app.py`
-    structured_output = {
+    # Final output structure (same as old)
+    return {
         "timestamp": datetime.now().isoformat(),
-        "query": query,
+        "query": "Combined strategic Danish, global, and sustainability shipping sources",
         "serper_results": enriched_articles,
-        "eea_context_sources": EEA_SOURCES
     }
-
-    return structured_output
