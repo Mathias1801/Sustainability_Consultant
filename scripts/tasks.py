@@ -62,20 +62,26 @@ class CustomTasks:
         )
     def business_alignment_task(self, agent, final_output_text):
         company_profile = """
-        Q1: Do you have a published sustainability or ESG strategy? (If yes, please provide a link or key goals — e.g., net-zero targets, material focus areas.)
-        1. Yes — Our 2030 strategy includes net-zero targets for Scopes 1 and 2 by 2030, and Scope 3 by 2045. Key focus areas include green logistics, renewable sourcing, and reducing water intensity.
+        Q1: What is your company’s sustainability strategy?
+        1. Maersk embeds sustainability into its core corporate strategy, treating it not as an initiative but as a fundamental lens for decision-making. The company’s mission is to decarbonize global supply chains while creating long-term value for customers and society. Recent efforts include a $1.4 billion investment in green methanol-powered vessels and the introduction of an internal carbon pricing model to guide capital allocation.
         
-        Q2: Do you measure and report your greenhouse gas (GHG) emissions? (Please indicate which scopes — 1, 2, or 3 — and share recent figures if available.)
-        2. Yes — Scope 1 and 2 emissions are fully reported for 2022 and 2023. Scope 3 is not yet systematically measured but is identified as a priority for 2025.
+        Q2: How do you measure and manage greenhouse gas emissions?
+        2. Maersk tracks emissions using key performance indicators focused on fuel efficiency and sustainability metrics across its logistics chain. Scope 1 and 2 emissions are consistently measured, and systems for Scope 3 monitoring are being scaled. Emission data plays a key role in operational planning and strategic evaluation.
         
-        Q3: What actions have you taken to reduce your environmental footprint in the past year? (This could include energy efficiency, waste reduction, circular economy practices, etc.)
-        3. Implemented building energy retrofits resulting in a 10% reduction in electricity use. Transitioned 40% of vehicle fleet to electric. Launched internal waste-reduction challenge across departments.
+        Q3: What steps has your company taken to reduce its environmental footprint?
+        3. Emission-reducing technologies have been prioritized, including a large-scale transition to green fuels. Maersk empowers its workforce through programs like the ‘sustainability champions’ initiative, which generated over 3000 ideas for operational improvements in a single year. Sustainability is also embedded into procurement, facility design, and innovation workflows.
         
-        Q4: Do you evaluate the sustainability practices of your suppliers or partners? (If so, how? For example, supplier audits, certifications, or sustainability clauses.)
-        4. No — We currently do not evaluate supplier sustainability practices formally. There is no audit program or requirement for sustainability certifications, though we are exploring a framework for 2026.
+        Q4: How do you approach sustainability across your value chain?
+        4. Supplier sustainability is evaluated through scoring systems that are progressively integrated into sourcing and partnership decisions. While formal audit mechanisms are still expanding, the emphasis is on aligning upstream practices with long-term decarbonization goals.
         
-        Q5: Who in your organization is responsible for sustainability efforts, and do you publish regular reports? (e.g., CSO, ESG committee, or external reporting like GRI/TCFD.)
-        5. Sustainability is overseen by the Chief Strategy Officer. While no dedicated CSO exists, the company issues an integrated report aligned with GRI since 2021 and TCFD since 2023.
+        Q5: Who is responsible for sustainability and how is it governed?
+        5. Maersk uses a distributed model of sustainability responsibility, with accountability shared across departments. An ESG-focused governance structure oversees risks and opportunities, while executive compensation is partly tied to sustainability performance. The company issues integrated reports aligned with international frameworks and engages in multi-stakeholder initiatives like SBTi.
+        
+        Q6: How is sustainability embedded in your company culture?
+        6. Sustainability at Maersk is not managed top-down but through a blend of planned and emergent strategies. Employee involvement is central — cross-functional working groups, feedback loops, and internal storytelling campaigns foster engagement. The company emphasizes adaptability in the face of geopolitical volatility, regulatory shifts, and technological change.
+        
+        Q7: How do you differentiate from competitors through sustainability?
+        7. Maersk views sustainability not as a compliance measure, but as a strategic differentiator. Its competitive edge lies in the ability to scale sustainable solutions across a global network, while leveraging policy influence and deep infrastructure. By aligning environmental goals with customer needs, Maersk positions sustainability as a premium service offering that supports long-term value creation.
         """
 
         return Task(
