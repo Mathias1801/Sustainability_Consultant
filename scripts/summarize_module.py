@@ -29,4 +29,5 @@ def summarize_articles(serper_data_text):
         {serper_data_text}
     """)
     llm = get_gpt()
-    return str(llm.invoke(prompt))
+    message = llm.invoke(prompt)
+    return message.content if hasattr(message, "content") else str(message)

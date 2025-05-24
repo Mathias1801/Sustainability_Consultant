@@ -41,4 +41,5 @@ def run_attribution(summary, consultation, sources):
         DO NOT ADD CLAIMS — only evaluate what's present.
     """)
     llm = get_gpt()
-    return str(llm.invoke(prompt))
+    message = llm.invoke(prompt)
+    return message.content if hasattr(message, "content") else str(message)
