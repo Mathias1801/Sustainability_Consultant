@@ -1,5 +1,5 @@
 from textwrap import dedent
-from llm_utils import get_gpt
+from llm_utils import generate_response
 
 def consult(summary_text, company_profile):
     prompt = dedent(f"""
@@ -22,6 +22,4 @@ def consult(summary_text, company_profile):
 
         Conclude your response with 3–5 specific strategic recommendations tailored to Maersk’s sustainability maturity.
     """)
-    llm = get_gpt()
-    response = llm.generate_content(prompt)
-    return response.text
+    return generate_response(prompt)

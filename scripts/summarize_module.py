@@ -1,5 +1,5 @@
 from textwrap import dedent
-from llm_utils import get_gpt
+from llm_utils import generate_response
 
 def summarize_articles(serper_data_text):
     prompt = dedent(f"""
@@ -28,6 +28,4 @@ def summarize_articles(serper_data_text):
         ### Content to analyze:
         {serper_data_text}
     """)
-    llm = get_gpt()
-    response = llm.generate_content(prompt)
-    return response.text
+    return generate_response(prompt)

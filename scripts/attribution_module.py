@@ -1,5 +1,5 @@
 from textwrap import dedent
-from llm_utils import get_gpt
+from llm_utils import generate_response
 
 def run_attribution(summary, consultation, sources):
     prompt = dedent(f"""
@@ -40,6 +40,4 @@ def run_attribution(summary, consultation, sources):
         Flag any hallucinated claims or unverifiable statements. Be rigorous.
         DO NOT ADD CLAIMS — only evaluate what's present.
     """)
-    llm = get_gpt()
-    response = llm.generate_content(prompt)
-    return response.text
+    return generate_response(prompt)
