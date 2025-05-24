@@ -23,5 +23,5 @@ def consult(summary_text, company_profile):
         Conclude your response with 3–5 specific strategic recommendations tailored to Maersk’s sustainability maturity.
     """)
     llm = get_gpt()
-    message = llm.invoke(prompt)
-    return message.content if hasattr(message, "content") else str(message)
+    response = llm.generate_content(prompt)
+    return response.text
