@@ -8,4 +8,4 @@ if not GEMINI_API_KEY:
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 def get_gpt():
-    return client.models.get("gemini-2.5-flash-preview-05-20")
+    return client.get_model("gemini-2.5-flash-preview-05-20")
