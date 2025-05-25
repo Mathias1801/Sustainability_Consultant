@@ -59,6 +59,7 @@ def fetch_sustainability_articles():
         )
     ]
 
+    # Fetch and deduplicate articles
     seen_links = set()
     combined_results = []
 
@@ -85,26 +86,7 @@ def fetch_sustainability_articles():
                 })
                 seen_links.add(link)
 
-    # 🔗 Add direct URLs from known sources
-    direct_urls = [
-        "https://danishshipping.dk/en/about/danish-shipping/annual-report-2024/",
-        "https://transport.ec.europa.eu/transport-modes/maritime/decarbonising-maritime-transport-fueleu-maritime_en#:~:text=The%20FuelEU%20maritime%20regulation%20will,2025%3A%20%2D2%25%3B",
-        "https://mission-innovation.net/missions/shipping/",
-        "https://mission-innovation.net/news_mission/mis-technical-advisory-group-completes-first-annual-review-of-missions/",
-        "https://www.maersk.com/sustainability/all-the-way-to-net-zero"
-    ]
-
-    for url in direct_urls:
-        if url not in seen_links:
-            combined_results.append({
-                "title": "",       # Will be filled during enrichment
-                "link": url,
-                "date": "",
-                "snippet": ""
-            })
-            seen_links.add(url)
-
-    # 🧠 Enrich all articles with full content
+    # Enrich with full article text
     enriched_articles = []
     for item in combined_results:
         url = item["link"]
@@ -132,8 +114,10 @@ def fetch_sustainability_articles():
 
         enriched_articles.append(enriched)
 
+    # Final output structure
     return {
         "timestamp": datetime.now().isoformat(),
-        "query": "Combined strategic Danish, global, and sustainability shipping sources",
+        "query_summary": "Combined strategic, global, and sustainability shipping sources",
+        "query_details": [payload["q"] for _, payload in queries_payloads],
         "serper_results": enriched_articles,
     }
