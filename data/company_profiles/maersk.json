@@ -1,0 +1,28 @@
+{
+  "name": "Maersk",
+  "description": "Maersk is a global leader in integrated container logistics. The company operates in over 130 countries and employs more than 100,000 people. Maersk’s core services include ocean and inland freight transportation, supply chain management, and port terminal operations.",
+  "sustainability_strategy": {
+    "net_zero_commitment": "Maersk has committed to achieving net-zero greenhouse gas emissions across its operations by 2040.",
+    "decarbonization_efforts": [
+      "Investments in methanol-powered vessels",
+      "Partnerships for green fuel supply chains",
+      "Fleet efficiency improvements and retrofitting"
+    ],
+    "climate_risk_disclosure": "Maersk reports using TCFD-aligned disclosures and integrates climate risk into enterprise risk management.",
+    "circular_initiatives": [
+      "Recycling and reuse programs at container depots",
+      "Packaging and cargo efficiency collaborations with shippers"
+    ],
+    "esg_governance": "Board-level Sustainability Committee, ESG performance tied to executive compensation"
+  },
+  "stakeholder_focus": [
+    "Shippers and logistics clients seeking greener supply chains",
+    "Investors and ESG rating agencies",
+    "International regulators and maritime policy makers"
+  ],
+  "prior_sustainability_awards": [
+    "CDP Climate A-List",
+    "EcoVadis Gold Rating",
+    "Top 10 in S&P Global’s Sustainability Yearbook (Shipping Sector)"
+  ]
+}
