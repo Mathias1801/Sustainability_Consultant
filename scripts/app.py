@@ -27,6 +27,8 @@ def main():
 
     current_summary_path = "docs/_data/current_summary.json"
     current_consultation_path = "docs/_data/current_consultation.json"
+    current_attribution_path = "docs/_data/current_attribution.json"
+
 
     # === Fetch Articles ===
     serper_results = fetch_sustainability_articles()
@@ -77,7 +79,11 @@ def main():
 
     with open(json_attribution_path, "w", encoding="utf-8") as f:
         json.dump({"date": summary_date, "content": attribution_output_text}, f, indent=2)
-    print(f"📎 Attribution file saved for {summary_date}")
+
+    with open(current_attribution_path, "w", encoding="utf-8") as f:
+        json.dump({"date": summary_date, "content": attribution_output_text}, f, indent=2)
+
+    print(f"📘 Attribution file saved and updated for {summary_date}")
 
     # === Save to SQLite DB ===
     conn = sqlite3.connect(db_path)
