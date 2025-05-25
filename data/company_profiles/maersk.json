@@ -1,28 +1,57 @@
 {
-  "name": "Maersk",
-  "description": "Maersk is a global leader in integrated container logistics. The company operates in over 130 countries and employs more than 100,000 people. Maersk’s core services include ocean and inland freight transportation, supply chain management, and port terminal operations.",
-  "sustainability_strategy": {
-    "net_zero_commitment": "Maersk has committed to achieving net-zero greenhouse gas emissions across its operations by 2040.",
-    "decarbonization_efforts": [
-      "Investments in methanol-powered vessels",
-      "Partnerships for green fuel supply chains",
-      "Fleet efficiency improvements and retrofitting"
-    ],
-    "climate_risk_disclosure": "Maersk reports using TCFD-aligned disclosures and integrates climate risk into enterprise risk management.",
-    "circular_initiatives": [
-      "Recycling and reuse programs at container depots",
-      "Packaging and cargo efficiency collaborations with shippers"
-    ],
-    "esg_governance": "Board-level Sustainability Committee, ESG performance tied to executive compensation"
+  "company_name": "Maersk",
+  "overview": {
+    "description": "Maersk is a global leader in integrated container logistics operating in over 130 countries with more than 100,000 employees. Sustainability at Maersk has shifted from a compliance-driven ESG framework to a strategically embedded value system. Their long-term mission is to decarbonize global supply chains while enhancing long-term value creation for customers and society."
   },
-  "stakeholder_focus": [
-    "Shippers and logistics clients seeking greener supply chains",
-    "Investors and ESG rating agencies",
-    "International regulators and maritime policy makers"
-  ],
-  "prior_sustainability_awards": [
-    "CDP Climate A-List",
-    "EcoVadis Gold Rating",
-    "Top 10 in S&P Global’s Sustainability Yearbook (Shipping Sector)"
-  ]
+  "strategic_sustainability": {
+    "integration": {
+      "definition": "Sustainability means decarbonizing global supply chains while creating long-term value for customers and society.",
+      "method": "Sustainability is embedded into financial, innovation, and operational strategies and is not confined to any single department. The strategy is both planned and emergent—allowing adaptation to regulatory, geopolitical, and technological disruptions.",
+      "governance": "A dedicated Sustainability Committee oversees ESG risks and opportunities. Executive compensation is tied to sustainability KPIs, including emissions reductions and supplier ratings.",
+      "internal_alignment": "Maersk formed cross-department working groups and employee-driven programs like 'Sustainability Champions' to ensure alignment. Over 3,000 employees contributed ideas in 2024."
+    },
+    "investment_and_measures": {
+      "decarbonization_initiatives": [
+        "Over $1.4 billion invested in green methanol-powered vessels",
+        "25 ships ordered to run on methanol by 2027",
+        "Internal carbon pricing applied to all new investment decisions"
+      ],
+      "KPIs": [
+        "CO2 and natural gas emissions per unit",
+        "Fuel efficiency per kilometer",
+        "Supplier sustainability scoring"
+      ]
+    },
+    "cultural_infrastructure": {
+      "employee_involvement": "Maersk ensures employee engagement through feedback loops, strategy co-creation, training, and recognition. This enhances motivation and behavioral alignment.",
+      "internal_communication": "Sustainability narratives are prioritized over dense reporting. Human-centered stories, clear priorities, and team autonomy are emphasized to avoid overload and increase impact."
+    },
+    "governance_and_adaptation": {
+      "strategy_duality": "Maersk balances long-term sustainable ambitions with short-term financial demands. Trade-offs are evaluated using internal values and are resolved with preference for long-term vision.",
+      "resilience": "The company embraces emergent strategy models, leveraging unexpected developments (e.g., regulatory changes) to reinforce sustainability."
+    }
+  },
+  "stakeholder_engagement": {
+    "audience": [
+      "Frontline operational teams",
+      "Customers seeking low-emission transport solutions",
+      "Investors and ESG rating agencies",
+      "Policy makers in maritime and logistics"
+    ],
+    "dialogue_mechanisms": [
+      "Cross-departmental collaboration councils",
+      "Internal storytelling and experience-sharing programs",
+      "Science Based Targets initiative (SBTi) partnerships"
+    ]
+  },
+  "differentiation_and_competitive_edge": {
+    "strategy": "Maersk uses sustainability not just for compliance, but as a value proposition. Their decarbonization leadership enables them to charge a premium for large-scale, low-emission logistics solutions.",
+    "scaling_edge": "Maersk sees competitive advantage in its ability to scale sustainability solutions globally. 'Being first to scale' is viewed as more strategic than simply being a pioneer."
+  },
+  "challenges_and_reflections": {
+    "internal_alignment": "Too much autonomy in strategy interpretation has led to inconsistencies. This risk is managed via structured communication and cross-checking priorities.",
+    "strategic_tensions": "In some cases, sustainability goals required delaying financial gains. These trade-offs were accepted as necessary for long-term brand integrity and operational transformation.",
+    "innovation_driver": "Sustainability has driven innovation and deepened partnerships. It is treated as both a strategic lens and ethical compass."
+  },
+  "sensitive_data_note": "Maersk's input reflects internal values, governance dynamics, and cultural alignment processes. Any use of this information should evaluate sensitivity and consider limiting exposure of internal narratives or strategic trade-off examples in public-facing applications."
 }
