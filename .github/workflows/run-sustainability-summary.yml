@@ -49,6 +49,7 @@ jobs:
           git add data/sustainability.db
           git add docs/_data/current_summary.json
           git add docs/_data/current_consultation.json
+          git add docs/_data/current_attribution.json
 
           git commit -m "📄 Weekly sustainability summary, consultation, and attribution update" || echo "Nothing to commit"
           git push || echo "Nothing to push"
