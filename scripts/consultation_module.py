@@ -1,7 +1,7 @@
 from textwrap import dedent
 from llm_utils import generate_response
 
-def consult(summary_text, company_profile):
+def consult(summary_text, company_profile, perm_sources):
     prompt = dedent(f"""
         You are a Corporate Sustainability Strategist. Your task is to analyze how the following sustainability trends and developments align with the strategic sustainability profile of Maersk.
 

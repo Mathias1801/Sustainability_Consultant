@@ -50,8 +50,16 @@ def main():
 
     # === Run Business Consultation ===
     print("\n🏢 Running business consultation...\n")
-    company_profile = """..."""  # Replace with actual Maersk profile
-    business_output_text = consult(final_output_text, company_profile)
+    # Load Maersk company profile
+    with open("data/company_profiles/maersk.json", "r", encoding="utf-8") as f:
+        company_profile = f.read()
+
+    # Load permanent source material
+    with open("data/perm_sources/data.json", "r", encoding="utf-8") as f:
+        perm_sources = json.dumps(json.load(f), indent=2)
+
+    # Run business consultation with both
+    business_output_text = consult(final_output_text, company_profile, perm_sources)
 
     with open(json_consultation_path, "w", encoding="utf-8") as f:
         json.dump({"date": summary_date, "content": business_output_text}, f, indent=2)
