@@ -43,7 +43,9 @@ def main():
 
     # === Run Summarization ===
     print("\n🚀 Running summarization...\n")
-    final_output_text = summarize_articles(serper_data_text)
+    with open("data/company_profiles/maersk.json", "r", encoding="utf-8") as f:
+        company_profile = f.read()
+    final_output_text = summarize_articles(serper_data_text, company_profile)
 
     with open(json_summary_path, "w", encoding="utf-8") as f:
         json.dump({"date": summary_date, "content": final_output_text}, f, indent=2)
@@ -52,10 +54,6 @@ def main():
 
     # === Run Business Consultation ===
     print("\n🏢 Running business consultation...\n")
-    # Load Maersk company profile
-    with open("data/company_profiles/maersk.json", "r", encoding="utf-8") as f:
-        company_profile = f.read()
-
     # Load permanent source material
     with open("data/perm_sources/data.json", "r", encoding="utf-8") as f:
         perm_sources = json.dumps(json.load(f), indent=2)
