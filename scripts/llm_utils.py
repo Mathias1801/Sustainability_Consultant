@@ -10,6 +10,7 @@ client = genai.Client(api_key=GEMINI_API_KEY)
 def generate_response(prompt: str, model: str = "gemini-2.5-flash-preview-05-20"):
     response = client.models.generate_content(
         model=model,
-        contents=prompt
+        contents=prompt,
+        generation_config={"temperature": 0.9}
     )
     return response.text
