@@ -30,7 +30,7 @@ init_db()
 @app.route('/submit-rating', methods=['POST'])
 def submit_rating():
     data = request.get_json()
-    rating_type = data.get('type')  # 'weekly_news' or 'business_consultancy'
+    rating_type = data.get('type')
     content_date = data.get('content_date')
     rating = data.get('rating')
 
