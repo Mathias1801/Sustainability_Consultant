@@ -9,7 +9,6 @@ def fetch_sustainability_articles():
     if not api_key:
         raise ValueError("Environment variable SERPER_API_KEY is not set.")
 
-    # Define all queries and payloads
     queries_payloads = [
         (
             "shipping OR logistik OR containere OR "
@@ -59,7 +58,6 @@ def fetch_sustainability_articles():
         )
     ]
 
-    # Fetch and deduplicate articles
     seen_links = set()
     combined_results = []
 
@@ -86,7 +84,6 @@ def fetch_sustainability_articles():
                 })
                 seen_links.add(link)
 
-    # Enrich with full article text
     enriched_articles = []
     for item in combined_results:
         url = item["link"]
@@ -114,7 +111,6 @@ def fetch_sustainability_articles():
 
         enriched_articles.append(enriched)
 
-    # Final output structure
     return {
         "timestamp": datetime.now().isoformat(),
         "query_summary": "Combined strategic, global, and sustainability shipping sources",
