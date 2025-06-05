@@ -19,7 +19,7 @@ This project automatically:
 3. **Analyzes Strategic Business Relevance**
 4. **Performs Attribution to Original Sources**
 5. **Stores Data in SQLite**
-6. **Provides a Flask API for User Ratings**
+6. **API-setup for User Ratings**
 
 All components are automated and can run as a scheduled workflow.
 
@@ -83,20 +83,6 @@ This will populate the `data/` and `docs/_data/` folders with summaries, consult
 
 ---
 
-## 🖥️ Run the Flask Rating API
-
-To start the rating server:
-```bash
-python render/submit_rating.py
-```
-
-Endpoints:
-- `POST /submit-rating`
-- `GET /average-rating`
-- `GET /download-ratings`
-
----
-
 ## 🔁 GitHub Actions
 
 Two workflows are included:
@@ -108,7 +94,7 @@ Two workflows are included:
 ## 🧠 Tech Stack
 
 - **LLMs**: Google Gemini 2.5
-- **Flask**: API for feedback
+- **Render**: API for feedback
 - **SQLite**: Lightweight local storage
 - **GitHub Actions**: Automation
 - **Python**: Core scripting and orchestration
@@ -120,9 +106,6 @@ Two workflows are included:
 - Example company: **Maersk**
 - Attribution is LLM-assisted but flags unsupported claims
 - Output is saved both in JSON and SQLite for flexible use
+- MVP, things might change
 
 ---
-
-## 🤝 Contributions
-
-Feel free to fork and extend this project to support more companies or integrate other data sources. PRs welcome!
