@@ -13,7 +13,7 @@ https://mathias1801.github.io/Sustainability_Consultant/
 ├── data/             # Contains datasets and input files
 ├── docs/             # Documentation and related resources
 ├── images/           # Visual assets and screenshots
-├── render/           # Output files and generated visuals
+├── render/           # API-Setup
 ├── scripts/          # Source code and utility scripts
 ├── .github/workflows # GitHub Actions for CI/CD
 ├── requirements.txt  # Python dependencies
