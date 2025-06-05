@@ -11,8 +11,5 @@ def generate_response(prompt: str, model: str = "gemini-2.5-flash-preview-05-20"
     response = client.models.generate_content(
         model=model,
         contents=prompt,
-        config=type.GenerateContentConfig(
-            temperature=0.9
-        )
     )
     return response.text
