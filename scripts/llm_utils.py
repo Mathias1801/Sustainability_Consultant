@@ -1,5 +1,6 @@
 import os
 from google import genai
+from google.genai import types
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
 if not GEMINI_API_KEY:
@@ -11,5 +12,8 @@ def generate_response(prompt: str, model: str = "gemini-2.5-flash-preview-05-20"
     response = client.models.generate_content(
         model=model,
         contents=prompt,
+        config=types.GenerateContentConfig(
+            temperature=0.9
+        )
     )
     return response.text
