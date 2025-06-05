@@ -47,8 +47,9 @@ All components are automated and can run as a scheduled workflow.
 │   ├── app.py                    # End-to-end pipeline runner
 │   ├── attribution_module.py
 │   ├── consultation_module.py
-│   ├── summarize_module.py       # (external)
-│   └── llm_utils.py              # Gemini API wrapper
+│   ├── summarize_module.py       
+│   ├── serper_search.py       
+│   └── llm_utils.py              # API wrapper
 └── .github/workflows/            # GitHub Actions automation
 ```
 ---
