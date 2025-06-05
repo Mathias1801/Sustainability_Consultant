@@ -42,7 +42,7 @@ All components are automated and can run as a scheduled workflow.
 │   ├── attribution/
 │   └── sustainability.db         # SQLite storage
 ├── docs/_data/                   # Live JSON data for frontend rendering
-├── render/submit_rating.py       # Flask API to handle feedback and ratings
+├── render/submit_rating.py       # Render API to handle feedback and ratings
 ├── scripts/                      # Main automation scripts
 │   ├── app.py                    # End-to-end pipeline runner
 │   ├── attribution_module.py
