@@ -51,36 +51,6 @@ All components are automated and can run as a scheduled workflow.
 │   └── llm_utils.py              # Gemini API wrapper
 └── .github/workflows/            # GitHub Actions automation
 ```
-
----
-
-## ⚙️ Setup Instructions
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Mathias1801/Sustainability_Consultant.git
-cd Sustainability_Consultant
-```
-
-### 2. Install Requirements
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Add Environment Variables
-
-Create a `.env` file with your Google Gemini API key:
-```
-GEMINI_API_KEY=your_api_key_here
-```
-
-### 4. Run the Pipeline
-```bash
-python scripts/app.py
-```
-
-This will populate the `data/` and `docs/_data/` folders with summaries, consultations, and attributions.
-
 ---
 
 ## 🔁 GitHub Actions
