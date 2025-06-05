@@ -2,11 +2,11 @@ name: Daily Sync Ratings from Render
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Every day at 06:00 UTC
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: write  # Required to push commits
+  contents: write
 
 jobs:
   sync-ratings:
